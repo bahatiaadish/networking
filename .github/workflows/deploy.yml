@@ -1,0 +1,41 @@
+name: Deploy BGP Tutorial to GitHub Pages
+
+on:
+  push:
+    branches: [ main ]
+    paths:
+      - 'bgp-tutorial/**'
+      - '.github/workflows/deploy.yml'
+  workflow_dispatch:
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: '18'
+          cache: 'npm'
+          cache-dependency-path: bgp-tutorial/package-lock.json
+
+      - name: Install Dependencies
+        run: |
+          cd bgp-tutorial
+          npm ci
+
+      - name: Build
+        run: |
+          cd bgp-tutorial
+          npm run build
+
+      - name: Deploy to GitHub Pages
+        uses: JamesIves/github-pages-deploy-action@v4
+        with:
+          folder: bgp-tutorial/dist
+          branch: gh-pages
