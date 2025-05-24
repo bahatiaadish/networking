@@ -6,6 +6,7 @@ on:
     paths:
       - 'bgp-tutorial/**'
       - '.github/workflows/deploy.yml'
+  workflow_dispatch:
 
 jobs:
   build-and-deploy:
