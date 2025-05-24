@@ -39,3 +39,4 @@ jobs:
         with:
           folder: bgp-tutorial/dist
           branch: gh-pages
+          target-folder: bgp-tutorial
