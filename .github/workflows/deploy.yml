@@ -10,6 +10,8 @@ on:
 jobs:
   build-and-deploy:
     runs-on: ubuntu-latest
+    permissions:
+      contents: write
     steps:
       - name: Checkout
         uses: actions/checkout@v3
@@ -30,12 +32,9 @@ jobs:
         run: |
           cd bgp-tutorial
           npm run build
-          # Update base path for GitHub Pages
-          echo "window.BASE_PATH = '/networking/bgp-tutorial';" > dist/base-path.js
 
       - name: Deploy to GitHub Pages
         uses: JamesIves/github-pages-deploy-action@v4
         with:
           folder: bgp-tutorial/dist
           branch: gh-pages
-          target-folder: bgp-tutorial
