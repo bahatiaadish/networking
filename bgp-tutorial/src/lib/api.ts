@@ -26,7 +26,7 @@ export interface ChatResponse {
  * In production, this should point to the deployed backend URL
  */
 const API_BASE_URL = import.meta.env.PROD 
-  ? 'https://bgp-tutorial-backend.fly.dev' // Production URL after deployment
+  ? 'https://bgp-tutorial-backend.loca.lt' // Production URL using localtunnel
   : 'http://localhost:8000'; // Development URL
 
 /**
