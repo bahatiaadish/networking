@@ -26,8 +26,11 @@ export interface ChatResponse {
  * In production, this should point to the deployed backend URL
  */
 const API_BASE_URL = import.meta.env.PROD 
-  ? 'https://bgp-tutorial-backend.fly.dev' // Production URL after deployment
+  ? 'https://bgp-tutorial-backend.loca.lt' // Production URL using localtunnel
   : 'http://localhost:8000'; // Development URL
+
+const FORCE_BACKEND_URL = 'https://bgp-tutorial-backend.loca.lt';
+const FINAL_API_URL = FORCE_BACKEND_URL || API_BASE_URL;
 
 /**
  * Send a chat request to the backend API
@@ -36,7 +39,7 @@ const API_BASE_URL = import.meta.env.PROD
  */
 export async function sendChatRequest(request: ChatRequest): Promise<ChatResponse> {
   try {
-    const response = await fetch(`${API_BASE_URL}/chat`, {
+    const response = await fetch(`${FINAL_API_URL}/chat`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
