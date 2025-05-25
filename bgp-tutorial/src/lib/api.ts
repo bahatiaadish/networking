@@ -29,7 +29,7 @@ const API_BASE_URL = import.meta.env.PROD
   ? 'https://bgp-tutorial-backend.loca.lt' // Production URL using localtunnel
   : 'http://localhost:8000'; // Development URL
 
-const FORCE_BACKEND_URL = 'https://bgp-tutorial-backend.loca.lt';
+const FORCE_BACKEND_URL = 'https://breezy-poems-open.loca.lt';
 const FINAL_API_URL = FORCE_BACKEND_URL || API_BASE_URL;
 
 /**
