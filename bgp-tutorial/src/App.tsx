@@ -16,6 +16,7 @@ import BGPRouteMapFilter from './components/diagrams/examples/BGPRouteMapFilter'
 import BGPASPathFilter from './components/diagrams/examples/BGPASPathFilter'
 import BGPCommunityFilter from './components/diagrams/examples/BGPCommunityFilter'
 import BGPCommunityFlow from './components/diagrams/examples/BGPCommunityFlow'
+import { ChatWidget } from './components/ui/chat-widget'
 
 function App() {
   const [activeSection, setActiveSection] = useState('introduction')
@@ -155,6 +156,9 @@ function App() {
           {/* Content Area */}
           <div className="md:col-span-3">
             <div className="bg-white dark:bg-gray-800 rounded-lg shadow-sm p-6">
+              {/* Add ChatWidget for the current section */}
+              <ChatWidget section={activeSection} />
+              
               {activeSection === 'introduction' && (
                 <div>
                   <h2 className="text-2xl font-bold mb-4 text-gray-900 dark:text-white">Introduction to BGP</h2>
