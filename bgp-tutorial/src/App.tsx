@@ -16,7 +16,7 @@ import BGPRouteMapFilter from './components/diagrams/examples/BGPRouteMapFilter'
 import BGPASPathFilter from './components/diagrams/examples/BGPASPathFilter'
 import BGPCommunityFilter from './components/diagrams/examples/BGPCommunityFilter'
 import BGPCommunityFlow from './components/diagrams/examples/BGPCommunityFlow'
-import { ChatWidget } from './components/ui/chat-widget'
+import { SectionChatButton } from './components/ui/chat-widget'
 
 function App() {
   const [activeSection, setActiveSection] = useState('introduction')
@@ -156,12 +156,12 @@ function App() {
           {/* Content Area */}
           <div className="md:col-span-3">
             <div className="bg-white dark:bg-gray-800 rounded-lg shadow-sm p-6">
-              {/* Add ChatWidget for the current section */}
-              <ChatWidget section={activeSection} />
-              
               {activeSection === 'introduction' && (
                 <div>
-                  <h2 className="text-2xl font-bold mb-4 text-gray-900 dark:text-white">Introduction to BGP</h2>
+                  <div className="flex items-center justify-between mb-4">
+                    <h2 className="text-2xl font-bold text-gray-900 dark:text-white">Introduction to BGP</h2>
+                    <SectionChatButton section="introduction" title="Introduction to BGP" />
+                  </div>
                   <div className="space-y-4">
                     <p className="text-lg">
                       Border Gateway Protocol (BGP) is the routing protocol that powers the Internet. It's responsible for making path determination decisions between autonomous systems (AS).
@@ -242,7 +242,10 @@ function App() {
               {/* Placeholder for other sections - will implement in next steps */}
               {activeSection === 'fundamentals' && (
                 <div>
-                  <h2 className="text-2xl font-bold mb-4 text-gray-900 dark:text-white">BGP Fundamentals</h2>
+                  <div className="flex items-center justify-between mb-4">
+                    <h2 className="text-2xl font-bold text-gray-900 dark:text-white">BGP Fundamentals</h2>
+                    <SectionChatButton section="fundamentals" title="BGP Fundamentals" />
+                  </div>
                   <div className="space-y-6">
                     <p className="text-lg">
                       Understanding the fundamental concepts of BGP is essential for network engineers working with internet routing.
@@ -355,7 +358,10 @@ function App() {
               
               {activeSection === 'addressFamilies' && (
                 <div>
-                  <h2 className="text-2xl font-bold mb-4 text-gray-900 dark:text-white">BGP Address Families</h2>
+                  <div className="flex items-center justify-between mb-4">
+                    <h2 className="text-2xl font-bold text-gray-900 dark:text-white">BGP Address Families</h2>
+                    <SectionChatButton section="addressFamilies" title="BGP Address Families" />
+                  </div>
                   <div className="space-y-6">
                     <p className="text-lg">
                       BGP supports multiple address families through MP-BGP (Multiprotocol BGP), allowing it to carry routing information for different network layer protocols.
@@ -486,7 +492,10 @@ function App() {
               
               {activeSection === 'configuration' && (
                 <div>
-                  <h2 className="text-2xl font-bold mb-4 text-gray-900 dark:text-white">BGP Configuration</h2>
+                  <div className="flex items-center justify-between mb-4">
+                    <h2 className="text-2xl font-bold text-gray-900 dark:text-white">BGP Configuration</h2>
+                    <SectionChatButton section="configuration" title="BGP Configuration" />
+                  </div>
                   <div className="space-y-6">
                     <p className="text-lg">
                       BGP configuration varies across different vendor platforms. Here are examples for common network equipment vendors.
@@ -736,7 +745,10 @@ function App() {
               
               {activeSection === 'bestPractices' && (
                 <div>
-                  <h2 className="text-2xl font-bold mb-4 text-gray-900 dark:text-white">BGP Best Practices</h2>
+                  <div className="flex items-center justify-between mb-4">
+                    <h2 className="text-2xl font-bold text-gray-900 dark:text-white">BGP Best Practices</h2>
+                    <SectionChatButton section="bestPractices" title="BGP Best Practices" />
+                  </div>
                   <div className="space-y-6">
                     <p className="text-lg">
                       Following best practices for BGP implementation helps ensure network stability, security, and optimal performance.
@@ -843,7 +855,10 @@ function App() {
               
               {activeSection === 'routeFiltering' && (
                 <div>
-                  <h2 className="text-2xl font-bold mb-4 text-gray-900 dark:text-white">BGP Route Filtering</h2>
+                  <div className="flex items-center justify-between mb-4">
+                    <h2 className="text-2xl font-bold text-gray-900 dark:text-white">BGP Route Filtering</h2>
+                    <SectionChatButton section="routeFiltering" title="BGP Route Filtering" />
+                  </div>
                   <div className="space-y-6">
                     <p className="text-lg">
                       Route filtering is a critical aspect of BGP implementation that allows network administrators to control which routes are advertised to and received from BGP peers.
@@ -1000,7 +1015,10 @@ function App() {
               
               {activeSection === 'communities' && (
                 <div>
-                  <h2 className="text-2xl font-bold mb-4 text-gray-900 dark:text-white">BGP Communities</h2>
+                  <div className="flex items-center justify-between mb-4">
+                    <h2 className="text-2xl font-bold text-gray-900 dark:text-white">BGP Communities</h2>
+                    <SectionChatButton section="communities" title="BGP Communities" />
+                  </div>
                   <div className="space-y-6">
                     <p className="text-lg">
                       BGP communities are optional transitive attributes that provide a way to group routes for applying common routing policies.
@@ -1145,7 +1163,10 @@ function App() {
               
               {activeSection === 'security' && (
                 <div>
-                  <h2 className="text-2xl font-bold mb-4 text-gray-900 dark:text-white">BGP Security</h2>
+                  <div className="flex items-center justify-between mb-4">
+                    <h2 className="text-2xl font-bold text-gray-900 dark:text-white">BGP Security</h2>
+                    <SectionChatButton section="security" title="BGP Security" />
+                  </div>
                   <div className="space-y-6">
                     <p className="text-lg">
                       Securing BGP is critical for maintaining the integrity and stability of network routing. This section covers key BGP security measures and best practices.
@@ -1296,7 +1317,10 @@ function App() {
               
               {activeSection === 'troubleshooting' && (
                 <div>
-                  <h2 className="text-2xl font-bold mb-4 text-gray-900 dark:text-white">BGP Troubleshooting</h2>
+                  <div className="flex items-center justify-between mb-4">
+                    <h2 className="text-2xl font-bold text-gray-900 dark:text-white">BGP Troubleshooting</h2>
+                    <SectionChatButton section="troubleshooting" title="BGP Troubleshooting" />
+                  </div>
                   <div className="space-y-6">
                     <p className="text-lg">
                       Effective BGP troubleshooting requires understanding common issues and knowing which commands to use for diagnosis.
@@ -1499,7 +1523,10 @@ function App() {
               
               {activeSection === 'timers' && (
                 <div>
-                  <h2 className="text-2xl font-bold mb-4 text-gray-900 dark:text-white">BGP Timers</h2>
+                  <div className="flex items-center justify-between mb-4">
+                    <h2 className="text-2xl font-bold text-gray-900 dark:text-white">BGP Timers</h2>
+                    <SectionChatButton section="timers" title="BGP Timers" />
+                  </div>
                   <div className="space-y-6">
                     <p className="text-lg">
                       BGP timers play a crucial role in controlling session establishment, maintenance, and convergence speed.
@@ -1682,7 +1709,10 @@ function App() {
               
               {activeSection === 'loadBalancing' && (
                 <div>
-                  <h2 className="text-2xl font-bold mb-4 text-gray-900 dark:text-white">BGP Load Balancing</h2>
+                  <div className="flex items-center justify-between mb-4">
+                    <h2 className="text-2xl font-bold text-gray-900 dark:text-white">BGP Load Balancing</h2>
+                    <SectionChatButton section="loadBalancing" title="BGP Load Balancing" />
+                  </div>
                   <div className="space-y-6">
                     <p className="text-lg">
                       BGP load balancing allows traffic to be distributed across multiple paths, improving bandwidth utilization and redundancy.
@@ -1814,7 +1844,10 @@ function App() {
               
               {activeSection === 'sdwan' && (
                 <div>
-                  <h2 className="text-2xl font-bold mb-4 text-gray-900 dark:text-white">BGP in SD-WAN</h2>
+                  <div className="flex items-center justify-between mb-4">
+                    <h2 className="text-2xl font-bold text-gray-900 dark:text-white">BGP in SD-WAN</h2>
+                    <SectionChatButton section="sdwan" title="BGP in SD-WAN" />
+                  </div>
                   <div className="space-y-6">
                     <p className="text-lg">
                       Software-Defined Wide Area Network (SD-WAN) solutions often leverage BGP for routing integration with existing networks and service providers.
@@ -1948,7 +1981,10 @@ function App() {
               
               {activeSection === 'realWorldExamples' && (
                 <div>
-                  <h2 className="text-2xl font-bold mb-4 text-gray-900 dark:text-white">Real-World Examples</h2>
+                  <div className="flex items-center justify-between mb-4">
+                    <h2 className="text-2xl font-bold text-gray-900 dark:text-white">Real-World Examples</h2>
+                    <SectionChatButton section="realWorldExamples" title="Real-World Examples" />
+                  </div>
                   <div className="space-y-6">
                     <p className="text-lg">
                       Examining real-world BGP implementations helps understand how BGP is used in different network environments.
