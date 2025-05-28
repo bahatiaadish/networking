@@ -1,13 +1,14 @@
-# CCNA Tutorial with Interactive Diagrams
+# CCNA Interactive Tutorial
 
-This PR adds a comprehensive CCNA tutorial focused on routing and switching topics with interactive network diagrams. The implementation follows the structure of the existing BGP tutorial but is tailored specifically for CCNA certification content.
+This PR implements a comprehensive, React-based interactive CCNA tutorial focusing on routing and switching topics. The tutorial has been completely rebuilt from scratch to match the structure and style of the BGP tutorial.
 
 ## Features
 
-- Interactive network diagrams for all key CCNA routing and switching topics
-- Comprehensive explanations and Cisco IOS configuration examples
-- Responsive design with dark mode support
-- Clear visual separation of network components with proper color-coding
+- Interactive network diagrams for all CCNA topics
+- Detailed Cisco IOS configuration examples
+- Comprehensive explanations of networking concepts
+- Clean, responsive UI with dark mode support
+- Sidebar navigation for easy topic access
 
 ## Topics Covered
 
@@ -21,18 +22,15 @@ This PR adds a comprehensive CCNA tutorial focused on routing and switching topi
 - Subnetting/IP addressing
 - DHCP concepts
 
-## Implementation Details
-
-- React-based interactive tutorial using TypeScript and Vite
-- Network diagrams implemented using React Flow
-- Consistent card-based layout for all content sections
-- Lazy-loaded diagrams using React Suspense
-
 ## Screenshots
 
-![CCNA Tutorial Interface](/home/ubuntu/repos/networking/ccna-tutorial/src/assets/ccna-tutorial-screenshot.png)
+![CCNA Tutorial Introduction](/home/ubuntu/screenshots/localhost_5173_110611.png)
+![CCNA Tutorial VLANs Section](/home/ubuntu/screenshots/localhost_5173_110626.png)
+![CCNA Tutorial NAT Section](/home/ubuntu/screenshots/localhost_5173_110637.png)
+![CCNA Tutorial DHCP Section](/home/ubuntu/screenshots/localhost_5173_110650.png)
 
 ## Link to Devin run
 https://app.devin.ai/sessions/505957b1a2514e3384cf268dbf42ae0b
 
-Requested by: Aadish Bahati
+## Requested by
+Aadish Bahati
