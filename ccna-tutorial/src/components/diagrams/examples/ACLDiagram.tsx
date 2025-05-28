@@ -1,93 +1,116 @@
 import React from 'react';
-import type { Node, Edge } from 'reactflow';
+import { Node, Edge } from 'react-flow-renderer';
 import { NetworkDiagram } from '../NetworkDiagram';
 
 interface ACLDiagramProps {
   className?: string;
 }
 
-export function ACLDiagram({ className = '' }: ACLDiagramProps) {
+const ACLDiagram: React.FC<ACLDiagramProps> = ({ className }) => {
   const nodes: Node[] = [
     {
       id: 'router1',
       type: 'router',
-      data: { label: 'Router 1\nACL Applied' },
-      position: { x: 400, y: 150 },
+      position: { x: 250, y: 100 },
+      data: { 
+        label: 'Border Router', 
+        ip: 'Outside: 203.0.113.1/24\nInside: 192.168.1.1/24' 
+      }
     },
     {
-      id: 'switch1',
-      type: 'switch',
-      data: { label: 'Switch 1' },
-      position: { x: 200, y: 300 },
+      id: 'internet',
+      type: 'cloud',
+      position: { x: 100, y: 200 },
+      data: { 
+        label: 'Internet' 
+      }
     },
     {
-      id: 'switch2',
-      type: 'switch',
-      data: { label: 'Switch 2' },
-      position: { x: 600, y: 300 },
-    },
-    {
-      id: 'pc1',
-      type: 'pc',
-      data: { label: 'PC1\n192.168.1.10' },
-      position: { x: 100, y: 450 },
-    },
-    {
-      id: 'pc2',
-      type: 'pc',
-      data: { label: 'PC2\n192.168.1.20' },
-      position: { x: 300, y: 450 },
+      id: 'internal',
+      type: 'cloud',
+      position: { x: 400, y: 200 },
+      data: { 
+        label: 'Internal Network\n192.168.1.0/24' 
+      }
     },
     {
       id: 'server1',
       type: 'server',
-      data: { label: 'Web Server\n192.168.2.10' },
-      position: { x: 500, y: 450 },
+      position: { x: 350, y: 300 },
+      data: { 
+        label: 'Web Server', 
+        ip: '192.168.1.10/24' 
+      }
     },
     {
       id: 'server2',
       type: 'server',
-      data: { label: 'Database Server\n192.168.2.20' },
-      position: { x: 700, y: 450 },
+      position: { x: 450, y: 300 },
+      data: { 
+        label: 'Database Server', 
+        ip: '192.168.1.20/24' 
+      }
     },
+    {
+      id: 'pc1',
+      type: 'pc',
+      position: { x: 400, y: 400 },
+      data: { 
+        label: 'Workstation', 
+        ip: '192.168.1.100/24' 
+      }
+    },
+    {
+      id: 'acl-inbound',
+      type: 'cloud',
+      position: { x: 175, y: 300 },
+      data: { 
+        label: 'Inbound ACL (100):\npermit tcp any host 192.168.1.10 eq 80\npermit tcp any host 192.168.1.10 eq 443\ndeny ip any any' 
+      }
+    },
+    {
+      id: 'acl-outbound',
+      type: 'cloud',
+      position: { x: 325, y: 500 },
+      data: { 
+        label: 'Outbound ACL (101):\npermit tcp 192.168.1.0 0.0.0.255 any eq 80\npermit tcp 192.168.1.0 0.0.0.255 any eq 443\npermit udp 192.168.1.0 0.0.0.255 any eq 53\ndeny ip any any' 
+      }
+    }
   ];
 
   const edges: Edge[] = [
-    {
-      id: 'e-r1-s1',
-      source: 'router1',
-      target: 'switch1',
-      label: 'Fa0/0\n192.168.1.1/24',
+    { 
+      id: 'e1', 
+      source: 'internet', 
+      target: 'router1',
+      label: 'ACL 100 Applied',
+      animated: true
     },
-    {
-      id: 'e-r1-s2',
-      source: 'router1',
-      target: 'switch2',
-      label: 'Fa0/1\n192.168.2.1/24',
+    { 
+      id: 'e2', 
+      source: 'router1', 
+      target: 'internal',
+      label: 'ACL 101 Applied',
+      animated: true
     },
-    {
-      id: 'e-s1-pc1',
-      source: 'switch1',
-      target: 'pc1',
+    { id: 'e3', source: 'internal', target: 'server1' },
+    { id: 'e4', source: 'internal', target: 'server2' },
+    { id: 'e5', source: 'internal', target: 'pc1' },
+    { 
+      id: 'e6', 
+      source: 'router1', 
+      target: 'acl-inbound',
+      style: { stroke: 'red', strokeDasharray: '5,5' }
     },
-    {
-      id: 'e-s1-pc2',
-      source: 'switch1',
-      target: 'pc2',
-    },
-    {
-      id: 'e-s2-server1',
-      source: 'switch2',
-      target: 'server1',
-    },
-    {
-      id: 'e-s2-server2',
-      source: 'switch2',
-      target: 'server2',
-      style: { stroke: 'red', strokeDasharray: '5, 5' },
-      label: 'Blocked by ACL',
-    },
+    { 
+      id: 'e7', 
+      source: 'router1', 
+      target: 'acl-outbound',
+      style: { stroke: 'red', strokeDasharray: '5,5' }
+    }
   ];
 
   return <NetworkDiagram nodes={nodes} edges={edges} className={className} />;
-}
+};
+
+export default ACLDiagram;

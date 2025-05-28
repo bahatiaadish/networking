@@ -1,86 +1,109 @@
 import React from 'react';
-import type { Node, Edge } from 'reactflow';
+import { Node, Edge } from 'react-flow-renderer';
 import { NetworkDiagram } from '../NetworkDiagram';
 
 interface DHCPDiagramProps {
   className?: string;
 }
 
-export function DHCPDiagram({ className = '' }: DHCPDiagramProps) {
+const DHCPDiagram: React.FC<DHCPDiagramProps> = ({ className }) => {
   const nodes: Node[] = [
     {
-      id: 'router1',
-      type: 'router',
-      data: { label: 'Router\nDHCP Server' },
+      id: 'dhcp-server',
+      type: 'server',
       position: { x: 400, y: 100 },
+      data: { label: 'DHCP Server', ip: '192.168.1.2' }
+    },
+    {
+      id: 'router',
+      type: 'router',
+      position: { x: 250, y: 200 },
+      data: { label: 'Router with DHCP Relay', ip: '192.168.1.1 / 192.168.2.1' }
     },
     {
       id: 'switch1',
       type: 'switch',
-      data: { label: 'Switch' },
-      position: { x: 400, y: 250 },
+      position: { x: 100, y: 300 },
+      data: { label: 'Switch (Local Subnet)', ip: '192.168.1.3' }
+    },
+    {
+      id: 'switch2',
+      type: 'switch',
+      position: { x: 400, y: 300 },
+      data: { label: 'Switch (Remote Subnet)', ip: '192.168.2.3' }
     },
     {
       id: 'pc1',
       type: 'pc',
-      data: { label: 'PC1\nDHCP Client' },
-      position: { x: 200, y: 400 },
+      position: { x: 50, y: 400 },
+      data: { label: 'PC 1 (DHCP Client)', ip: 'Requesting IP...' }
     },
     {
       id: 'pc2',
       type: 'pc',
-      data: { label: 'PC2\nDHCP Client' },
-      position: { x: 400, y: 400 },
+      position: { x: 150, y: 400 },
+      data: { label: 'PC 2 (Static IP)', ip: '192.168.1.10' }
     },
     {
       id: 'pc3',
       type: 'pc',
-      data: { label: 'PC3\nDHCP Client' },
-      position: { x: 600, y: 400 },
+      position: { x: 350, y: 400 },
+      data: { label: 'PC 3 (DHCP Client)', ip: 'Requesting IP...' }
     },
     {
-      id: 'server1',
-      type: 'server',
-      data: { label: 'Server\nStatic IP: 192.168.1.10' },
-      position: { x: 700, y: 250 },
+      id: 'pc4',
+      type: 'pc',
+      position: { x: 450, y: 400 },
+      data: { label: 'PC 4 (DHCP Client)', ip: '192.168.2.101 (Leased)' }
     },
+    {
+      id: 'dhcp-process',
+      type: 'cloud',
+      position: { x: 250, y: 500 },
+      data: { label: 'DHCP Process:\n1. DISCOVER\n2. OFFER\n3. REQUEST\n4. ACKNOWLEDGE' }
+    }
   ];
 
   const edges: Edge[] = [
-    {
-      id: 'e-router-switch',
-      source: 'router1',
+    { 
+      id: 'e1', 
+      source: 'dhcp-server', 
+      target: 'router',
+      animated: true
+    },
+    { 
+      id: 'e2', 
+      source: 'router', 
       target: 'switch1',
-      label: 'DHCP Server\n192.168.1.1',
+      animated: true
     },
-    {
-      id: 'e-switch-pc1',
-      source: 'switch1',
-      target: 'pc1',
-      label: 'DHCP Discover/Offer\nRequest/ACK',
-      animated: true,
+    { 
+      id: 'e3', 
+      source: 'router', 
+      target: 'switch2',
+      animated: true
     },
-    {
-      id: 'e-switch-pc2',
-      source: 'switch1',
-      target: 'pc2',
-      label: 'DHCP Discover/Offer\nRequest/ACK',
-      animated: true,
+    { id: 'e4', source: 'switch1', target: 'pc1' },
+    { id: 'e5', source: 'switch1', target: 'pc2' },
+    { id: 'e6', source: 'switch2', target: 'pc3' },
+    { id: 'e7', source: 'switch2', target: 'pc4' },
+    { 
+      id: 'e8', 
+      source: 'pc1', 
+      target: 'dhcp-process',
+      style: { stroke: 'green', strokeDasharray: '5,5' },
+      animated: true
     },
-    {
-      id: 'e-switch-pc3',
-      source: 'switch1',
-      target: 'pc3',
-      label: 'DHCP Discover/Offer\nRequest/ACK',
-      animated: true,
-    },
-    {
-      id: 'e-switch-server',
-      source: 'switch1',
-      target: 'server1',
-      label: 'Static IP',
-    },
+    { 
+      id: 'e9', 
+      source: 'pc3', 
+      target: 'dhcp-process',
+      style: { stroke: 'green', strokeDasharray: '5,5' },
+      animated: true
+    }
   ];
 
   return <NetworkDiagram nodes={nodes} edges={edges} className={className} />;
-}
+};
+
+export default DHCPDiagram;

@@ -1,134 +1,92 @@
 import React from 'react';
-import type { Node, Edge } from 'reactflow';
+import { Node, Edge } from 'react-flow-renderer';
 import { NetworkDiagram } from '../NetworkDiagram';
 
 interface VLANTopologyProps {
   className?: string;
 }
 
-export function VLANTopology({ className = '' }: VLANTopologyProps) {
+const VLANTopology: React.FC<VLANTopologyProps> = ({ className }) => {
   const nodes: Node[] = [
     {
       id: 'switch1',
       type: 'switch',
-      data: { label: 'Core Switch' },
-      position: { x: 400, y: 100 },
+      position: { x: 250, y: 100 },
+      data: { label: 'Core Switch', ip: '192.168.1.1' }
     },
     {
-      id: 'switch2',
-      type: 'switch',
-      data: { label: 'Access Switch 1\nVLAN 10, 20' },
-      position: { x: 200, y: 250 },
+      id: 'vlan10',
+      type: 'cloud',
+      position: { x: 100, y: 250 },
+      data: { label: 'VLAN 10\nEngineering' }
     },
     {
-      id: 'switch3',
-      type: 'switch',
-      data: { label: 'Access Switch 2\nVLAN 10, 30' },
+      id: 'vlan20',
+      type: 'cloud',
+      position: { x: 250, y: 250 },
+      data: { label: 'VLAN 20\nAccounting' }
+    },
+    {
+      id: 'vlan30',
+      type: 'cloud',
       position: { x: 400, y: 250 },
-    },
-    {
-      id: 'switch4',
-      type: 'switch',
-      data: { label: 'Access Switch 3\nVLAN 20, 30' },
-      position: { x: 600, y: 250 },
+      data: { label: 'VLAN 30\nManagement' }
     },
     {
       id: 'pc1',
       type: 'pc',
-      data: { label: 'PC1\nVLAN 10' },
-      position: { x: 100, y: 400 },
+      position: { x: 50, y: 350 },
+      data: { label: 'Engineering PC', ip: '192.168.10.10' }
     },
     {
       id: 'pc2',
       type: 'pc',
-      data: { label: 'PC2\nVLAN 20' },
-      position: { x: 300, y: 400 },
+      position: { x: 150, y: 350 },
+      data: { label: 'Engineering PC', ip: '192.168.10.11' }
     },
     {
       id: 'pc3',
       type: 'pc',
-      data: { label: 'PC3\nVLAN 10' },
-      position: { x: 400, y: 400 },
+      position: { x: 250, y: 350 },
+      data: { label: 'Accounting PC', ip: '192.168.20.10' }
     },
     {
       id: 'pc4',
       type: 'pc',
-      data: { label: 'PC4\nVLAN 30' },
-      position: { x: 500, y: 400 },
-    },
-    {
-      id: 'pc5',
-      type: 'pc',
-      data: { label: 'PC5\nVLAN 20' },
-      position: { x: 600, y: 400 },
-    },
-    {
-      id: 'pc6',
-      type: 'pc',
-      data: { label: 'PC6\nVLAN 30' },
-      position: { x: 700, y: 400 },
-    },
+      position: { x: 400, y: 350 },
+      data: { label: 'Management PC', ip: '192.168.30.10' }
+    }
   ];
 
   const edges: Edge[] = [
-    {
-      id: 'e1-2',
-      source: 'switch1',
-      target: 'switch2',
-      label: 'Trunk',
-      animated: true,
+    { 
+      id: 'e1', 
+      source: 'switch1', 
+      target: 'vlan10',
+      label: 'Ports 1-8',
+      animated: true
     },
-    {
-      id: 'e1-3',
-      source: 'switch1',
-      target: 'switch3',
-      label: 'Trunk',
-      animated: true,
+    { 
+      id: 'e2', 
+      source: 'switch1', 
+      target: 'vlan20',
+      label: 'Ports 9-16',
+      animated: true
     },
-    {
-      id: 'e1-4',
-      source: 'switch1',
-      target: 'switch4',
-      label: 'Trunk',
-      animated: true,
+    { 
+      id: 'e3', 
+      source: 'switch1', 
+      target: 'vlan30',
+      label: 'Ports 17-24',
+      animated: true
     },
-    {
-      id: 'e2-pc1',
-      source: 'switch2',
-      target: 'pc1',
-      label: 'VLAN 10',
-    },
-    {
-      id: 'e2-pc2',
-      source: 'switch2',
-      target: 'pc2',
-      label: 'VLAN 20',
-    },
-    {
-      id: 'e3-pc3',
-      source: 'switch3',
-      target: 'pc3',
-      label: 'VLAN 10',
-    },
-    {
-      id: 'e3-pc4',
-      source: 'switch3',
-      target: 'pc4',
-      label: 'VLAN 30',
-    },
-    {
-      id: 'e4-pc5',
-      source: 'switch4',
-      target: 'pc5',
-      label: 'VLAN 20',
-    },
-    {
-      id: 'e4-pc6',
-      source: 'switch4',
-      target: 'pc6',
-      label: 'VLAN 30',
-    },
+    { id: 'e4', source: 'vlan10', target: 'pc1' },
+    { id: 'e5', source: 'vlan10', target: 'pc2' },
+    { id: 'e6', source: 'vlan20', target: 'pc3' },
+    { id: 'e7', source: 'vlan30', target: 'pc4' }
   ];
 
   return <NetworkDiagram nodes={nodes} edges={edges} className={className} />;
-}
+};
+
+export default VLANTopology;

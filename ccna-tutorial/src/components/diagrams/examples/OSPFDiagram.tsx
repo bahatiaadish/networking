@@ -1,111 +1,159 @@
 import React from 'react';
-import type { Node, Edge } from 'reactflow';
+import { Node, Edge } from 'react-flow-renderer';
 import { NetworkDiagram } from '../NetworkDiagram';
 
 interface OSPFDiagramProps {
   className?: string;
 }
 
-export function OSPFDiagram({ className = '' }: OSPFDiagramProps) {
+const OSPFDiagram: React.FC<OSPFDiagramProps> = ({ className }) => {
   const nodes: Node[] = [
     {
       id: 'router1',
       type: 'router',
-      data: { label: 'Router 1\nRouter ID: 1.1.1.1\nArea 0' },
-      position: { x: 300, y: 100 },
+      position: { x: 250, y: 50 },
+      data: { 
+        label: 'Area 0 Router (DR)', 
+        ip: 'Router ID: 1.1.1.1\n10.0.0.1/30\n10.0.0.5/30\n10.0.0.9/30' 
+      }
     },
     {
       id: 'router2',
       type: 'router',
-      data: { label: 'Router 2\nRouter ID: 2.2.2.2\nArea 0\nDR' },
-      position: { x: 500, y: 100 },
+      position: { x: 100, y: 150 },
+      data: { 
+        label: 'Area 0 Router (BDR)', 
+        ip: 'Router ID: 2.2.2.2\n10.0.0.2/30\n192.168.1.1/24' 
+      }
     },
     {
       id: 'router3',
       type: 'router',
-      data: { label: 'Router 3\nRouter ID: 3.3.3.3\nArea 0\nBDR' },
-      position: { x: 200, y: 250 },
+      position: { x: 250, y: 150 },
+      data: { 
+        label: 'Area 0 Router (DROTHER)', 
+        ip: 'Router ID: 3.3.3.3\n10.0.0.6/30\n192.168.2.1/24' 
+      }
     },
     {
       id: 'router4',
       type: 'router',
-      data: { label: 'Router 4\nRouter ID: 4.4.4.4\nArea 0' },
-      position: { x: 400, y: 250 },
-    },
-    {
-      id: 'router5',
-      type: 'router',
-      data: { label: 'Router 5\nRouter ID: 5.5.5.5\nArea 0' },
-      position: { x: 600, y: 250 },
+      position: { x: 400, y: 150 },
+      data: { 
+        label: 'Area 0 Router (DROTHER)', 
+        ip: 'Router ID: 4.4.4.4\n10.0.0.10/30\n192.168.3.1/24' 
+      }
     },
     {
       id: 'network1',
       type: 'cloud',
-      data: { label: '192.168.1.0/24' },
-      position: { x: 200, y: 400 },
+      position: { x: 100, y: 250 },
+      data: { 
+        label: 'Network 1\n192.168.1.0/24' 
+      }
     },
     {
       id: 'network2',
       type: 'cloud',
-      data: { label: '192.168.2.0/24' },
-      position: { x: 400, y: 400 },
+      position: { x: 250, y: 250 },
+      data: { 
+        label: 'Network 2\n192.168.2.0/24' 
+      }
     },
     {
       id: 'network3',
       type: 'cloud',
-      data: { label: '192.168.3.0/24' },
-      position: { x: 600, y: 400 },
+      position: { x: 400, y: 250 },
+      data: { 
+        label: 'Network 3\n192.168.3.0/24' 
+      }
     },
+    {
+      id: 'pc1',
+      type: 'pc',
+      position: { x: 100, y: 350 },
+      data: { 
+        label: 'PC 1', 
+        ip: '192.168.1.10/24\nGW: 192.168.1.1' 
+      }
+    },
+    {
+      id: 'pc2',
+      type: 'pc',
+      position: { x: 250, y: 350 },
+      data: { 
+        label: 'PC 2', 
+        ip: '192.168.2.10/24\nGW: 192.168.2.1' 
+      }
+    },
+    {
+      id: 'pc3',
+      type: 'pc',
+      position: { x: 400, y: 350 },
+      data: { 
+        label: 'PC 3', 
+        ip: '192.168.3.10/24\nGW: 192.168.3.1' 
+      }
+    },
+    {
+      id: 'ospf-info',
+      type: 'cloud',
+      position: { x: 250, y: 450 },
+      data: { 
+        label: 'OSPF Area 0 (Backbone)\nProcess ID: 1\nNetwork: 10.0.0.0/24\nAuthentication: MD5' 
+      }
+    }
   ];
 
   const edges: Edge[] = [
-    {
-      id: 'e-r1-r2',
-      source: 'router1',
+    { 
+      id: 'e1', 
+      source: 'router1', 
       target: 'router2',
-      label: 'OSPF Adjacency',
-      animated: true,
+      label: 'Cost: 10',
+      animated: true
     },
-    {
-      id: 'e-r1-r3',
-      source: 'router1',
+    { 
+      id: 'e2', 
+      source: 'router1', 
       target: 'router3',
-      label: 'OSPF Adjacency',
-      animated: true,
+      label: 'Cost: 10',
+      animated: true
     },
-    {
-      id: 'e-r2-r4',
-      source: 'router2',
+    { 
+      id: 'e3', 
+      source: 'router1', 
       target: 'router4',
-      label: 'OSPF Adjacency',
-      animated: true,
-    },
-    {
-      id: 'e-r2-r5',
-      source: 'router2',
-      target: 'router5',
-      label: 'OSPF Adjacency',
-      animated: true,
-    },
-    {
-      id: 'e-r3-network1',
-      source: 'router3',
-      target: 'network1',
       label: 'Cost: 10',
+      animated: true
     },
-    {
-      id: 'e-r4-network2',
-      source: 'router4',
-      target: 'network2',
-      label: 'Cost: 10',
+    { 
+      id: 'e4', 
+      source: 'router2', 
+      target: 'network1'
     },
-    {
-      id: 'e-r5-network3',
-      source: 'router5',
-      target: 'network3',
-      label: 'Cost: 10',
+    { 
+      id: 'e5', 
+      source: 'router3', 
+      target: 'network2'
     },
+    { 
+      id: 'e6', 
+      source: 'router4', 
+      target: 'network3'
+    },
+    { id: 'e7', source: 'network1', target: 'pc1' },
+    { id: 'e8', source: 'network2', target: 'pc2' },
+    { id: 'e9', source: 'network3', target: 'pc3' },
+    { 
+      id: 'e10', 
+      source: 'router1', 
+      target: 'ospf-info',
+      style: { stroke: 'purple', strokeDasharray: '5,5' }
+    }
   ];
 
   return <NetworkDiagram nodes={nodes} edges={edges} className={className} />;
-}
+};
+
+export default OSPFDiagram;
