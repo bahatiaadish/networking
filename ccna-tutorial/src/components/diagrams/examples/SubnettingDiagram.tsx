@@ -1,158 +1,110 @@
 import React from 'react';
-import type { Node, Edge } from 'reactflow';
+import { Node, Edge } from 'react-flow-renderer';
 import { NetworkDiagram } from '../NetworkDiagram';
 
 interface SubnettingDiagramProps {
   className?: string;
 }
 
-export function SubnettingDiagram({ className = '' }: SubnettingDiagramProps) {
+const SubnettingDiagram: React.FC<SubnettingDiagramProps> = ({ className }) => {
   const nodes: Node[] = [
     {
       id: 'router1',
       type: 'router',
-      data: { label: 'Core Router' },
-      position: { x: 400, y: 100 },
+      position: { x: 250, y: 100 },
+      data: { label: 'Core Router', ip: '10.0.0.1' }
     },
     {
       id: 'router2',
       type: 'router',
-      data: { label: 'Router A\n192.168.1.1/26' },
-      position: { x: 200, y: 250 },
+      position: { x: 100, y: 250 },
+      data: { label: 'Department A Router', ip: '10.0.0.2' }
     },
     {
       id: 'router3',
       type: 'router',
-      data: { label: 'Router B\n192.168.1.65/26' },
-      position: { x: 400, y: 250 },
+      position: { x: 250, y: 250 },
+      data: { label: 'Department B Router', ip: '10.0.0.3' }
     },
     {
       id: 'router4',
       type: 'router',
-      data: { label: 'Router C\n192.168.1.129/26' },
-      position: { x: 600, y: 250 },
+      position: { x: 400, y: 250 },
+      data: { label: 'Department C Router', ip: '10.0.0.4' }
     },
     {
-      id: 'switch1',
-      type: 'switch',
-      data: { label: 'Switch A' },
-      position: { x: 200, y: 350 },
+      id: 'subnet1',
+      type: 'cloud',
+      position: { x: 100, y: 400 },
+      data: { label: 'Subnet A (192.168.1.0/26)\n64 hosts' }
     },
     {
-      id: 'switch2',
-      type: 'switch',
-      data: { label: 'Switch B' },
-      position: { x: 400, y: 350 },
+      id: 'subnet2',
+      type: 'cloud',
+      position: { x: 250, y: 400 },
+      data: { label: 'Subnet B (192.168.1.64/26)\n64 hosts' }
     },
     {
-      id: 'switch3',
-      type: 'switch',
-      data: { label: 'Switch C' },
-      position: { x: 600, y: 350 },
+      id: 'subnet3',
+      type: 'cloud',
+      position: { x: 400, y: 400 },
+      data: { label: 'Subnet C (192.168.1.128/26)\n64 hosts' }
     },
     {
       id: 'pc1',
       type: 'pc',
-      data: { label: 'PC1\n192.168.1.10/26' },
-      position: { x: 100, y: 450 },
+      position: { x: 50, y: 500 },
+      data: { label: 'PC A1', ip: '192.168.1.10/26\nGW: 192.168.1.1' }
     },
     {
       id: 'pc2',
       type: 'pc',
-      data: { label: 'PC2\n192.168.1.20/26' },
-      position: { x: 200, y: 450 },
+      position: { x: 150, y: 500 },
+      data: { label: 'PC A2', ip: '192.168.1.11/26\nGW: 192.168.1.1' }
     },
     {
       id: 'pc3',
       type: 'pc',
-      data: { label: 'PC3\n192.168.1.70/26' },
-      position: { x: 350, y: 450 },
+      position: { x: 250, y: 500 },
+      data: { label: 'PC B1', ip: '192.168.1.74/26\nGW: 192.168.1.65' }
     },
     {
       id: 'pc4',
       type: 'pc',
-      data: { label: 'PC4\n192.168.1.80/26' },
-      position: { x: 450, y: 450 },
-    },
-    {
-      id: 'pc5',
-      type: 'pc',
-      data: { label: 'PC5\n192.168.1.140/26' },
-      position: { x: 550, y: 450 },
-    },
-    {
-      id: 'pc6',
-      type: 'pc',
-      data: { label: 'PC6\n192.168.1.150/26' },
-      position: { x: 650, y: 450 },
-    },
+      position: { x: 400, y: 500 },
+      data: { label: 'PC C1', ip: '192.168.1.138/26\nGW: 192.168.1.129' }
+    }
   ];
 
   const edges: Edge[] = [
-    {
-      id: 'e-r1-r2',
-      source: 'router1',
+    { 
+      id: 'e1', 
+      source: 'router1', 
       target: 'router2',
-      label: 'Subnet A\n192.168.1.0/26',
+      animated: true
     },
-    {
-      id: 'e-r1-r3',
-      source: 'router1',
+    { 
+      id: 'e2', 
+      source: 'router1', 
       target: 'router3',
-      label: 'Subnet B\n192.168.1.64/26',
+      animated: true
     },
-    {
-      id: 'e-r1-r4',
-      source: 'router1',
+    { 
+      id: 'e3', 
+      source: 'router1', 
       target: 'router4',
-      label: 'Subnet C\n192.168.1.128/26',
+      animated: true
     },
-    {
-      id: 'e-r2-s1',
-      source: 'router2',
-      target: 'switch1',
-    },
-    {
-      id: 'e-r3-s2',
-      source: 'router3',
-      target: 'switch2',
-    },
-    {
-      id: 'e-r4-s3',
-      source: 'router4',
-      target: 'switch3',
-    },
-    {
-      id: 'e-s1-pc1',
-      source: 'switch1',
-      target: 'pc1',
-    },
-    {
-      id: 'e-s1-pc2',
-      source: 'switch1',
-      target: 'pc2',
-    },
-    {
-      id: 'e-s2-pc3',
-      source: 'switch2',
-      target: 'pc3',
-    },
-    {
-      id: 'e-s2-pc4',
-      source: 'switch2',
-      target: 'pc4',
-    },
-    {
-      id: 'e-s3-pc5',
-      source: 'switch3',
-      target: 'pc5',
-    },
-    {
-      id: 'e-s3-pc6',
-      source: 'switch3',
-      target: 'pc6',
-    },
+    { id: 'e4', source: 'router2', target: 'subnet1' },
+    { id: 'e5', source: 'router3', target: 'subnet2' },
+    { id: 'e6', source: 'router4', target: 'subnet3' },
+    { id: 'e7', source: 'subnet1', target: 'pc1' },
+    { id: 'e8', source: 'subnet1', target: 'pc2' },
+    { id: 'e9', source: 'subnet2', target: 'pc3' },
+    { id: 'e10', source: 'subnet3', target: 'pc4' }
   ];
 
   return <NetworkDiagram nodes={nodes} edges={edges} className={className} />;
-}
+};
+
+export default SubnettingDiagram;

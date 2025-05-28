@@ -1,48 +1,68 @@
-import React, { useCallback } from 'react';
+import React from 'react';
 import ReactFlow, {
+  Node,
+  Edge,
   Controls,
   Background,
-  BackgroundVariant,
   MiniMap,
-} from 'reactflow';
-import type { Node, Edge, NodeTypes } from 'reactflow';
-import 'reactflow/dist/style.css';
+  NodeTypes,
+  ConnectionLineType
+} from 'react-flow-renderer';
+import 'react-flow-renderer/dist/style.css';
 
-const RouterNode = ({ data }: { data: any }) => (
-  <div className="px-4 py-2 shadow-md rounded-md bg-red-100 border-2 border-red-500">
-    <div className="font-bold text-center">{data.label}</div>
-  </div>
-);
+const RouterNode = ({ data }: { data: any }) => {
+  return (
+    <div className="bg-blue-100 dark:bg-blue-900 border-2 border-blue-500 rounded-md p-2 text-center">
+      <div className="font-bold">{data.label}</div>
+      {data.asn && <div className="text-xs">AS {data.asn}</div>}
+      {data.ip && <div className="text-xs">{data.ip}</div>}
+    </div>
+  );
+};
 
-const FirewallNode = ({ data }: { data: any }) => (
-  <div className="px-4 py-2 shadow-md rounded-md bg-orange-100 border-2 border-orange-500">
-    <div className="font-bold text-center">{data.label}</div>
-  </div>
-);
+const FirewallNode = ({ data }: { data: any }) => {
+  return (
+    <div className="bg-red-100 dark:bg-red-900 border-2 border-red-500 rounded-md p-2 text-center">
+      <div className="font-bold">{data.label}</div>
+      {data.ip && <div className="text-xs">{data.ip}</div>}
+    </div>
+  );
+};
 
-const SwitchNode = ({ data }: { data: any }) => (
-  <div className="px-4 py-2 shadow-md rounded-md bg-blue-100 border-2 border-blue-500">
-    <div className="font-bold text-center">{data.label}</div>
-  </div>
-);
+const SwitchNode = ({ data }: { data: any }) => {
+  return (
+    <div className="bg-green-100 dark:bg-green-900 border-2 border-green-500 rounded-md p-2 text-center">
+      <div className="font-bold">{data.label}</div>
+      {data.ip && <div className="text-xs">{data.ip}</div>}
+    </div>
+  );
+};
 
-const ServerNode = ({ data }: { data: any }) => (
-  <div className="px-4 py-2 shadow-md rounded-md bg-green-100 border-2 border-green-500">
-    <div className="font-bold text-center">{data.label}</div>
-  </div>
-);
+const ServerNode = ({ data }: { data: any }) => {
+  return (
+    <div className="bg-purple-100 dark:bg-purple-900 border-2 border-purple-500 rounded-md p-2 text-center">
+      <div className="font-bold">{data.label}</div>
+      {data.ip && <div className="text-xs">{data.ip}</div>}
+    </div>
+  );
+};
 
-const CloudNode = ({ data }: { data: any }) => (
-  <div className="px-4 py-2 shadow-md rounded-md bg-purple-100 border-2 border-purple-500">
-    <div className="font-bold text-center">{data.label}</div>
-  </div>
-);
+const CloudNode = ({ data }: { data: any }) => {
+  return (
+    <div className="bg-gray-100 dark:bg-gray-700 border-2 border-gray-500 rounded-md p-2 text-center">
+      <div className="font-bold">{data.label}</div>
+    </div>
+  );
+};
 
-const PCNode = ({ data }: { data: any }) => (
-  <div className="px-4 py-2 shadow-md rounded-md bg-gray-100 border-2 border-gray-500">
-    <div className="font-bold text-center">{data.label}</div>
-  </div>
-);
+const PCNode = ({ data }: { data: any }) => {
+  return (
+    <div className="bg-yellow-100 dark:bg-yellow-900 border-2 border-yellow-500 rounded-md p-2 text-center">
+      <div className="font-bold">{data.label}</div>
+      {data.ip && <div className="text-xs">{data.ip}</div>}
+    </div>
+  );
+};
 
 const nodeTypes: NodeTypes = {
   router: RouterNode,
@@ -50,7 +70,7 @@ const nodeTypes: NodeTypes = {
   switch: SwitchNode,
   server: ServerNode,
   cloud: CloudNode,
-  pc: PCNode,
+  pc: PCNode
 };
 
 interface NetworkDiagramProps {
@@ -59,25 +79,22 @@ interface NetworkDiagramProps {
   className?: string;
 }
 
-export function NetworkDiagram({ nodes, edges, className = '' }: NetworkDiagramProps) {
-  const onNodeClick = useCallback((_event: React.MouseEvent, node: Node) => {
-    console.log('Node clicked:', node);
-  }, []);
-
+export const NetworkDiagram: React.FC<NetworkDiagramProps> = ({ nodes, edges, className = 'h-[400px]' }) => {
   return (
-    <div className={`w-full h-[500px] ${className}`}>
+    <div className={className}>
       <ReactFlow
         nodes={nodes}
         edges={edges}
         nodeTypes={nodeTypes}
-        onNodeClick={onNodeClick}
+        connectionLineType={ConnectionLineType.SmoothStep}
         fitView
-        attributionPosition="bottom-right"
       >
         <Controls />
         <MiniMap />
-        <Background variant={BackgroundVariant.Dots} gap={12} size={1} />
+        <Background color="#aaa" gap={16} />
       </ReactFlow>
     </div>
   );
-}
+};
+
+export default NetworkDiagram;
