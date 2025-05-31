@@ -1,0 +1,785 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Excel Error Categorization Tool</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 15px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+            overflow: hidden;
+        }
+
+        .header {
+            background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+            color: white;
+            padding: 30px;
+            text-align: center;
+        }
+
+        .header h1 {
+            font-size: 2.5em;
+            margin-bottom: 10px;
+        }
+
+        .header p {
+            font-size: 1.1em;
+            opacity: 0.9;
+        }
+
+        .main-content {
+            padding: 30px;
+        }
+
+        .section {
+            margin-bottom: 30px;
+            padding: 25px;
+            border: 2px solid #e1e8ed;
+            border-radius: 10px;
+            background: #f8f9fa;
+        }
+
+        .section h2 {
+            color: #2c3e50;
+            margin-bottom: 20px;
+            font-size: 1.5em;
+            border-bottom: 2px solid #3498db;
+            padding-bottom: 10px;
+        }
+
+        .upload-area {
+            border: 3px dashed #3498db;
+            border-radius: 10px;
+            padding: 40px;
+            text-align: center;
+            background: white;
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+
+        .upload-area:hover {
+            border-color: #2980b9;
+            background: #f0f8ff;
+        }
+
+        .upload-area.dragover {
+            border-color: #27ae60;
+            background: #f0fff0;
+        }
+
+        .file-input {
+            display: none;
+        }
+
+        .upload-icon {
+            font-size: 3em;
+            color: #3498db;
+            margin-bottom: 15px;
+        }
+
+        .btn {
+            background: linear-gradient(135deg, #3498db, #2980b9);
+            color: white;
+            border: none;
+            padding: 12px 25px;
+            border-radius: 25px;
+            cursor: pointer;
+            font-size: 1em;
+            transition: all 0.3s ease;
+            margin: 5px;
+        }
+
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(52, 152, 219, 0.4);
+        }
+
+        .btn-success {
+            background: linear-gradient(135deg, #27ae60, #229954);
+        }
+
+        .btn-danger {
+            background: linear-gradient(135deg, #e74c3c, #c0392b);
+        }
+
+        .criteria-list {
+            background: white;
+            border-radius: 8px;
+            padding: 20px;
+        }
+
+        .criteria-item {
+            display: flex;
+            align-items: center;
+            padding: 15px;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            margin-bottom: 10px;
+            background: #f9f9f9;
+        }
+
+        .criteria-item input {
+            flex: 1;
+            margin: 0 10px;
+            padding: 8px 12px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+        }
+
+        .progress-bar {
+            width: 100%;
+            height: 20px;
+            background: #ecf0f1;
+            border-radius: 10px;
+            overflow: hidden;
+            margin: 20px 0;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #3498db, #2ecc71);
+            width: 0%;
+            transition: width 0.3s ease;
+        }
+
+        .results-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+            background: white;
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+
+        .results-table th,
+        .results-table td {
+            padding: 12px;
+            text-align: left;
+            border-bottom: 1px solid #ddd;
+        }
+
+        .results-table th {
+            background: #34495e;
+            color: white;
+            font-weight: 600;
+        }
+
+        .results-table tr:hover {
+            background: #f5f5f5;
+        }
+
+        .status {
+            padding: 15px;
+            border-radius: 8px;
+            margin: 15px 0;
+            font-weight: 500;
+        }
+
+        .status.success {
+            background: #d4edda;
+            color: #155724;
+            border: 1px solid #c3e6cb;
+        }
+
+        .status.error {
+            background: #f8d7da;
+            color: #721c24;
+            border: 1px solid #f5c6cb;
+        }
+
+        .status.info {
+            background: #d1ecf1;
+            color: #0c5460;
+            border: 1px solid #bee5eb;
+        }
+
+        .hidden {
+            display: none;
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+            margin: 20px 0;
+        }
+
+        .stat-card {
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            text-align: center;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+
+        .stat-number {
+            font-size: 2em;
+            font-weight: bold;
+            color: #3498db;
+        }
+
+        .stat-label {
+            color: #7f8c8d;
+            margin-top: 5px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>📊 Excel Error Categorization Tool</h1>
+            <p>Upload your Excel files and manage error categorization criteria dynamically</p>
+        </div>
+
+        <div class="main-content">
+            <!-- File Upload Section -->
+            <div class="section">
+                <h2>📁 File Upload</h2>
+                <div class="upload-area" id="inputUpload">
+                    <div class="upload-icon">📄</div>
+                    <h3>Upload Input Excel File</h3>
+                    <p>Drag and drop your Input.xlsx file here or click to browse</p>
+                    <input type="file" id="inputFile" class="file-input" accept=".xlsx,.xls">
+                </div>
+                
+                <div class="upload-area" id="categoriesUpload" style="margin-top: 20px;">
+                    <div class="upload-icon">📋</div>
+                    <h3>Upload Error Categories File (Optional)</h3>
+                    <p>Drag and drop your ErrorCategories.xlsx file here or click to browse</p>
+                    <input type="file" id="categoriesFile" class="file-input" accept=".xlsx,.xls">
+                </div>
+            </div>
+
+            <!-- Error Criteria Management -->
+            <div class="section">
+                <h2>⚙️ Error Categorization Criteria</h2>
+                <div class="criteria-list" id="criteriaList">
+                    <!-- Default criteria will be populated here -->
+                </div>
+                <button class="btn" onclick="addCriteria()">➕ Add New Criteria</button>
+                <button class="btn btn-success" onclick="resetToDefaults()">🔄 Reset to Defaults</button>
+            </div>
+
+            <!-- Processing Section -->
+            <div class="section">
+                <h2>🔄 Processing</h2>
+                <button class="btn btn-success" id="processBtn" onclick="processFiles()" disabled>
+                    🚀 Process Files
+                </button>
+                <div class="progress-bar hidden" id="progressBar">
+                    <div class="progress-fill" id="progressFill"></div>
+                </div>
+                <div id="statusMessages"></div>
+            </div>
+
+            <!-- Results Section -->
+            <div class="section hidden" id="resultsSection">
+                <h2>📈 Processing Results</h2>
+                <div class="stats-grid" id="statsGrid"></div>
+                <button class="btn btn-success" onclick="downloadResults()">💾 Download Output.xlsx</button>
+                <div style="max-height: 400px; overflow-y: auto; margin-top: 20px;">
+                    <table class="results-table" id="resultsTable">
+                        <thead>
+                            <tr>
+                                <th>Serial Number</th>
+                                <th>Message ID</th>
+                                <th>Error Category</th>
+                                <th>Date</th>
+                                <th>Time</th>
+                            </tr>
+                        </thead>
+                        <tbody id="resultsBody">
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Global variables
+        let inputData = null;
+        let categoriesData = null;
+        let processedResults = null;
+        let errorCriteria = [];
+
+        // Default error criteria
+        const defaultCriteria = [
+            { pattern: 'validation.*failed|invalid.*format|invalid.*data|schema.*error', category: 'Validation Error', type: 'regex' },
+            { pattern: 'timeout|timed out|connection timeout|request timeout', category: 'Timeout Error', type: 'regex' },
+            { pattern: 'connection refused|connection failed|network error|unable to connect', category: 'Connection Error', type: 'regex' },
+            { pattern: 'access denied|permission denied|unauthorized|forbidden', category: 'Permission Error', type: 'regex' },
+            { pattern: 'repeated commissioning', category: 'Repeated Commissioning', type: 'contains' }
+        ];
+
+        // Initialize the application
+        document.addEventListener('DOMContentLoaded', function() {
+            initializeUploadAreas();
+            resetToDefaults();
+        });
+
+        function initializeUploadAreas() {
+            setupUploadArea('inputUpload', 'inputFile', handleInputFile);
+            setupUploadArea('categoriesUpload', 'categoriesFile', handleCategoriesFile);
+        }
+
+        function setupUploadArea(areaId, inputId, handler) {
+            const area = document.getElementById(areaId);
+            const input = document.getElementById(inputId);
+
+            area.addEventListener('click', () => input.click());
+            area.addEventListener('dragover', (e) => {
+                e.preventDefault();
+                area.classList.add('dragover');
+            });
+            area.addEventListener('dragleave', () => {
+                area.classList.remove('dragover');
+            });
+            area.addEventListener('drop', (e) => {
+                e.preventDefault();
+                area.classList.remove('dragover');
+                const files = e.dataTransfer.files;
+                if (files.length > 0) {
+                    input.files = files;
+                    handler(files[0]);
+                }
+            });
+            input.addEventListener('change', (e) => {
+                if (e.target.files.length > 0) {
+                    handler(e.target.files[0]);
+                }
+            });
+        }
+
+        function handleInputFile(file) {
+            showStatus('Reading input file...', 'info');
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                try {
+                    const workbook = XLSX.read(e.target.result, { type: 'binary' });
+                    const sheetName = workbook.SheetNames[0];
+                    inputData = XLSX.utils.sheet_to_json(workbook.Sheets[sheetName]);
+                    
+                    showStatus(`✅ Input file loaded successfully! Found ${inputData.length} rows.`, 'success');
+                    updateProcessButton();
+                    
+                    // Update upload area to show file name
+                    document.getElementById('inputUpload').innerHTML = `
+                        <div class="upload-icon">✅</div>
+                        <h3>Input File Loaded</h3>
+                        <p><strong>${file.name}</strong> (${inputData.length} rows)</p>
+                    `;
+                } catch (error) {
+                    showStatus(`❌ Error reading input file: ${error.message}`, 'error');
+                }
+            };
+            reader.readAsBinaryString(file);
+        }
+
+        function handleCategoriesFile(file) {
+            showStatus('Reading categories file...', 'info');
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                try {
+                    const workbook = XLSX.read(e.target.result, { type: 'binary' });
+                    const sheetName = workbook.SheetNames[0];
+                    categoriesData = XLSX.utils.sheet_to_json(workbook.Sheets[sheetName]);
+                    
+                    showStatus(`✅ Categories file loaded successfully! Found ${categoriesData.length} categories.`, 'success');
+                    loadCategoriesIntoCriteria();
+                    
+                    // Update upload area to show file name
+                    document.getElementById('categoriesUpload').innerHTML = `
+                        <div class="upload-icon">✅</div>
+                        <h3>Categories File Loaded</h3>
+                        <p><strong>${file.name}</strong> (${categoriesData.length} categories)</p>
+                    `;
+                } catch (error) {
+                    showStatus(`❌ Error reading categories file: ${error.message}`, 'error');
+                }
+            };
+            reader.readAsBinaryString(file);
+        }
+
+        function loadCategoriesIntoCriteria() {
+            if (!categoriesData) return;
+            
+            // Clear existing criteria and add categories from file
+            errorCriteria = [...defaultCriteria];
+            
+            categoriesData.forEach(row => {
+                if (row['ErrorText'] && row['Error Category']) {
+                    errorCriteria.push({
+                        pattern: row['ErrorText'].toLowerCase(),
+                        category: row['Error Category'],
+                        type: 'contains'
+                    });
+                }
+            });
+            
+            renderCriteria();
+        }
+
+        function resetToDefaults() {
+            errorCriteria = [...defaultCriteria];
+            renderCriteria();
+            showStatus('Reset to default criteria', 'info');
+        }
+
+        function renderCriteria() {
+            const container = document.getElementById('criteriaList');
+            container.innerHTML = '';
+            
+            errorCriteria.forEach((criteria, index) => {
+                const div = document.createElement('div');
+                div.className = 'criteria-item';
+                div.innerHTML = `
+                    <input type="text" value="${criteria.pattern}" onchange="updateCriteria(${index}, 'pattern', this.value)" placeholder="Pattern/Text">
+                    <input type="text" value="${criteria.category}" onchange="updateCriteria(${index}, 'category', this.value)" placeholder="Category">
+                    <select onchange="updateCriteria(${index}, 'type', this.value)">
+                        <option value="contains" ${criteria.type === 'contains' ? 'selected' : ''}>Contains</option>
+                        <option value="regex" ${criteria.type === 'regex' ? 'selected' : ''}>Regex</option>
+                    </select>
+                    <button class="btn btn-danger" onclick="removeCriteria(${index})">🗑️</button>
+                `;
+                container.appendChild(div);
+            });
+        }
+
+        function addCriteria() {
+            errorCriteria.push({ pattern: '', category: '', type: 'contains' });
+            renderCriteria();
+        }
+
+        function removeCriteria(index) {
+            errorCriteria.splice(index, 1);
+            renderCriteria();
+        }
+
+        function updateCriteria(index, field, value) {
+            errorCriteria[index][field] = value;
+        }
+
+        function updateProcessButton() {
+            const btn = document.getElementById('processBtn');
+            btn.disabled = !inputData;
+        }
+
+        function showStatus(message, type) {
+            const container = document.getElementById('statusMessages');
+            const div = document.createElement('div');
+            div.className = `status ${type}`;
+            div.textContent = message;
+            container.appendChild(div);
+            
+            // Auto-remove after 5 seconds for info messages
+            if (type === 'info') {
+                setTimeout(() => {
+                    if (div.parentNode) {
+                        div.parentNode.removeChild(div);
+                    }
+                }, 5000);
+            }
+        }
+
+        function updateProgress(percent) {
+            const progressBar = document.getElementById('progressBar');
+            const progressFill = document.getElementById('progressFill');
+            
+            progressBar.classList.remove('hidden');
+            progressFill.style.width = percent + '%';
+            
+            if (percent >= 100) {
+                setTimeout(() => {
+                    progressBar.classList.add('hidden');
+                }, 1000);
+            }
+        }
+
+        async function processFiles() {
+            if (!inputData) {
+                showStatus('❌ Please upload an input file first', 'error');
+                return;
+            }
+
+            showStatus('🔄 Starting processing...', 'info');
+            updateProgress(10);
+
+            try {
+                // Extract unique message IDs
+                updateProgress(30);
+                const messageInfo = extractMessageInfo(inputData);
+                
+                // Categorize errors
+                updateProgress(60);
+                const results = categorizeErrors(inputData, messageInfo);
+                
+                // Generate output
+                updateProgress(90);
+                processedResults = generateOutput(results);
+                
+                updateProgress(100);
+                showStatus('✅ Processing completed successfully!', 'success');
+                displayResults();
+                
+            } catch (error) {
+                showStatus(`❌ Processing error: ${error.message}`, 'error');
+                console.error('Processing error:', error);
+            }
+        }
+
+        function extractMessageInfo(data) {
+            const messageInfo = {};
+            const processingPattern = /Message\s+([A-F0-9]+)\s+processing\s+started/i;
+            
+            // Group by Index
+            const indexGroups = {};
+            data.forEach(row => {
+                const index = row['Index'];
+                if (!indexGroups[index]) {
+                    indexGroups[index] = [];
+                }
+                indexGroups[index].push(row);
+            });
+            
+            // Extract message ID for each index
+            Object.keys(indexGroups).forEach(index => {
+                const rows = indexGroups[index];
+                
+                // Find processing started message
+                const processingMsg = rows.find(row => 
+                    processingPattern.test(row['Message text'] || '')
+                );
+                
+                if (processingMsg) {
+                    const match = processingMsg['Message text'].match(processingPattern);
+                    
+                    // Preserve original date/time formatting from Excel
+                    let dateValue = processingMsg['Date'] || 'UNKNOWN';
+                    let timeValue = processingMsg['Time'] || 'UNKNOWN';
+                    
+                    // If date is a number (Excel serial date), convert back to original format
+                    if (typeof dateValue === 'number' && dateValue > 0) {
+                        // Excel serial date to readable format
+                        const excelEpoch = new Date(1900, 0, 1);
+                        const jsDate = new Date(excelEpoch.getTime() + (dateValue - 2) * 24 * 60 * 60 * 1000);
+                        dateValue = jsDate.toLocaleDateString('en-GB'); // DD/MM/YYYY format
+                    }
+                    
+                    // If time is a decimal (Excel time fraction), convert back to time format
+                    if (typeof timeValue === 'number' && timeValue >= 0 && timeValue < 1) {
+                        // Excel time fraction to HH:MM:SS
+                        const totalSeconds = Math.round(timeValue * 24 * 60 * 60);
+                        const hours = Math.floor(totalSeconds / 3600);
+                        const minutes = Math.floor((totalSeconds % 3600) / 60);
+                        const seconds = totalSeconds % 60;
+                        timeValue = `${hours.toString().padStart(2, '0')}:${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+                    }
+                    
+                    messageInfo[index] = {
+                        messageId: match[1],
+                        date: dateValue,
+                        time: timeValue
+                    };
+                } else {
+                    messageInfo[index] = {
+                        messageId: 'UNKNOWN',
+                        date: 'UNKNOWN',
+                        time: 'UNKNOWN'
+                    };
+                }
+            });
+            
+            return messageInfo;
+        }
+
+        function categorizeErrors(data, messageInfo) {
+            const results = {};
+            
+            // Group by Index and categorize
+            Object.keys(messageInfo).forEach(index => {
+                const indexRows = data.filter(row => row['Index'] == index);
+                let category = 'Could not be put in any category, need manual intervention';
+                
+                // Check all messages for this index against criteria
+                for (const row of indexRows) {
+                    const messageText = (row['Message text'] || '').toLowerCase();
+                    
+                    for (const criteria of errorCriteria) {
+                        if (criteria.pattern && criteria.category) {
+                            let matches = false;
+                            
+                            if (criteria.type === 'regex') {
+                                try {
+                                    const regex = new RegExp(criteria.pattern, 'i');
+                                    matches = regex.test(messageText);
+                                } catch (e) {
+                                    // Invalid regex, treat as contains
+                                    matches = messageText.includes(criteria.pattern.toLowerCase());
+                                }
+                            } else {
+                                matches = messageText.includes(criteria.pattern.toLowerCase());
+                            }
+                            
+                            if (matches) {
+                                category = criteria.category;
+                                break;
+                            }
+                        }
+                    }
+                    
+                    if (category !== 'Could not be put in any category, need manual intervention') {
+                        break;
+                    }
+                }
+                
+                results[index] = {
+                    ...messageInfo[index],
+                    category: category
+                };
+            });
+            
+            return results;
+        }
+
+        function generateOutput(results) {
+            const output = [];
+            let serialNumber = 1;
+            
+            Object.keys(results).sort((a, b) => parseInt(a) - parseInt(b)).forEach(index => {
+                const result = results[index];
+                output.push({
+                    'Serial Number': serialNumber++,
+                    'Message ID': result.messageId,
+                    'Error Category': result.category,
+                    'Date': result.date,
+                    'Time': result.time
+                });
+            });
+            
+            return output;
+        }
+
+        function displayResults() {
+            const resultsSection = document.getElementById('resultsSection');
+            const statsGrid = document.getElementById('statsGrid');
+            const resultsBody = document.getElementById('resultsBody');
+            
+            resultsSection.classList.remove('hidden');
+            
+            // Generate statistics
+            const stats = generateStatistics(processedResults);
+            statsGrid.innerHTML = '';
+            
+            Object.keys(stats).forEach(key => {
+                const card = document.createElement('div');
+                card.className = 'stat-card';
+                card.innerHTML = `
+                    <div class="stat-number">${stats[key]}</div>
+                    <div class="stat-label">${key}</div>
+                `;
+                statsGrid.appendChild(card);
+            });
+            
+            // Populate results table
+            resultsBody.innerHTML = '';
+            processedResults.slice(0, 100).forEach(row => { // Show first 100 rows
+                const tr = document.createElement('tr');
+                tr.innerHTML = `
+                    <td>${row['Serial Number']}</td>
+                    <td>${row['Message ID']}</td>
+                    <td>${row['Error Category']}</td>
+                    <td>${row['Date']}</td>
+                    <td>${row['Time']}</td>
+                `;
+                resultsBody.appendChild(tr);
+            });
+            
+            if (processedResults.length > 100) {
+                const tr = document.createElement('tr');
+                tr.innerHTML = `<td colspan="5" style="text-align: center; font-style: italic;">... and ${processedResults.length - 100} more rows</td>`;
+                resultsBody.appendChild(tr);
+            }
+        }
+
+        function generateStatistics(results) {
+            const stats = {
+                'Total Records': results.length,
+                'Unique Message IDs': new Set(results.map(r => r['Message ID'])).size,
+                'Unknown IDs': results.filter(r => r['Message ID'] === 'UNKNOWN').length
+            };
+            
+            // Category distribution
+            const categories = {};
+            results.forEach(row => {
+                const category = row['Error Category'];
+                categories[category] = (categories[category] || 0) + 1;
+            });
+            
+            // Add top 3 categories to stats
+            const sortedCategories = Object.entries(categories)
+                .sort((a, b) => b[1] - a[1])
+                .slice(0, 3);
+            
+            sortedCategories.forEach(([category, count], index) => {
+                const shortCategory = category.length > 20 ? category.substring(0, 20) + '...' : category;
+                stats[shortCategory] = count;
+            });
+            
+            return stats;
+        }
+
+        function downloadResults() {
+            if (!processedResults) {
+                showStatus('❌ No results to download', 'error');
+                return;
+            }
+            
+            try {
+                const worksheet = XLSX.utils.json_to_sheet(processedResults);
+                
+                // Ensure Date and Time columns are treated as text to preserve formatting
+                const range = XLSX.utils.decode_range(worksheet['!ref']);
+                for (let row = range.s.r + 1; row <= range.e.r; row++) {
+                    const dateCell = XLSX.utils.encode_cell({r: row, c: 3}); // Date column (index 3)
+                    const timeCell = XLSX.utils.encode_cell({r: row, c: 4}); // Time column (index 4)
+                    
+                    if (worksheet[dateCell]) {
+                        worksheet[dateCell].t = 's'; // Force as string
+                    }
+                    if (worksheet[timeCell]) {
+                        worksheet[timeCell].t = 's'; // Force as string
+                    }
+                }
+                
+                const workbook = XLSX.utils.book_new();
+                XLSX.utils.book_append_sheet(workbook, worksheet, 'Sheet1');
+                
+                XLSX.writeFile(workbook, 'Output.xlsx');
+                showStatus('✅ Output.xlsx downloaded successfully!', 'success');
+            } catch (error) {
+                showStatus(`❌ Download error: ${error.message}`, 'error');
+            }
+        }
+    </script>
+</body>
+</html>
