@@ -572,10 +572,33 @@
                 
                 if (processingMsg) {
                     const match = processingMsg['Message text'].match(processingPattern);
+                    
+                    // Preserve original date/time formatting from Excel
+                    let dateValue = processingMsg['Date'] || 'UNKNOWN';
+                    let timeValue = processingMsg['Time'] || 'UNKNOWN';
+                    
+                    // If date is a number (Excel serial date), convert back to original format
+                    if (typeof dateValue === 'number' && dateValue > 0) {
+                        // Excel serial date to readable format
+                        const excelEpoch = new Date(1900, 0, 1);
+                        const jsDate = new Date(excelEpoch.getTime() + (dateValue - 2) * 24 * 60 * 60 * 1000);
+                        dateValue = jsDate.toLocaleDateString('en-GB'); // DD/MM/YYYY format
+                    }
+                    
+                    // If time is a decimal (Excel time fraction), convert back to time format
+                    if (typeof timeValue === 'number' && timeValue >= 0 && timeValue < 1) {
+                        // Excel time fraction to HH:MM:SS
+                        const totalSeconds = Math.round(timeValue * 24 * 60 * 60);
+                        const hours = Math.floor(totalSeconds / 3600);
+                        const minutes = Math.floor((totalSeconds % 3600) / 60);
+                        const seconds = totalSeconds % 60;
+                        timeValue = `${hours.toString().padStart(2, '0')}:${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+                    }
+                    
                     messageInfo[index] = {
                         messageId: match[1],
-                        date: processingMsg['Date'] || 'UNKNOWN',
-                        time: processingMsg['Time'] || 'UNKNOWN'
+                        date: dateValue,
+                        time: timeValue
                     };
                 } else {
                     messageInfo[index] = {
@@ -733,6 +756,21 @@
             
             try {
                 const worksheet = XLSX.utils.json_to_sheet(processedResults);
+                
+                // Ensure Date and Time columns are treated as text to preserve formatting
+                const range = XLSX.utils.decode_range(worksheet['!ref']);
+                for (let row = range.s.r + 1; row <= range.e.r; row++) {
+                    const dateCell = XLSX.utils.encode_cell({r: row, c: 3}); // Date column (index 3)
+                    const timeCell = XLSX.utils.encode_cell({r: row, c: 4}); // Time column (index 4)
+                    
+                    if (worksheet[dateCell]) {
+                        worksheet[dateCell].t = 's'; // Force as string
+                    }
+                    if (worksheet[timeCell]) {
+                        worksheet[timeCell].t = 's'; // Force as string
+                    }
+                }
+                
                 const workbook = XLSX.utils.book_new();
                 XLSX.utils.book_append_sheet(workbook, worksheet, 'Sheet1');
                 
