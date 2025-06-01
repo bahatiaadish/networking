@@ -1,0 +1,486 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Network Architecture Design Guide - Option 2: Distributed Control with Centralized Management</title>
+    <link rel="stylesheet" href="css/design-guide-styles.css">
+    <!-- D3.js for interactive diagrams -->
+    <script src="https://d3js.org/d3.v7.min.js"></script>
+</head>
+<body>
+    <header>
+        <div class="logo">
+            <h1>Network Architecture Design Guide</h1>
+        </div>
+        <div class="subtitle">
+            <h2>Option 2: Distributed Control with Centralized Management</h2>
+        </div>
+    </header>
+
+    <div class="search-container">
+        <input type="text" id="search-input" placeholder="Search design guide...">
+        <button id="search-button">Search</button>
+    </div>
+
+    <div id="search-results">
+        <div class="search-results-header">
+            <h3>Search Results (<span id="search-results-count">0</span>)</h3>
+            <button id="close-search">×</button>
+        </div>
+        <div id="search-results-list"></div>
+    </div>
+
+    <div class="main-container">
+        <nav>
+            <ul>
+                <li><a href="#overview" class="active">Architecture Overview</a></li>
+                <li><a href="#design-options">Design Options</a></li>
+                <li><a href="#device-placement">Device Placement</a></li>
+                <li><a href="#connectivity">Connectivity Patterns</a></li>
+                <li><a href="#traffic-flows">Traffic Flows</a></li>
+                <li><a href="#security">Security Architecture</a></li>
+                <li><a href="#aci-implementation">ACI Implementation</a></li>
+            </ul>
+        </nav>
+
+        <main>
+            <!-- Overview Section -->
+            <section id="overview" class="active-section">
+                <h2>Architecture Overview</h2>
+                <p>This design guide provides a comprehensive overview of Option 2: Distributed Control with Centralized Management for a three-datacenter network architecture. This architecture establishes three semi-autonomous datacenters with distributed control planes but centralized management orchestrated from the Tertiary Control Hub.</p>
+                
+                <div class="overview-card">
+                    <h3>Key Principles</h3>
+                    <ul>
+                        <li><strong>Operational Autonomy with Centralized Control:</strong> Each datacenter can operate independently if isolated, while centralized management ensures consistency.</li>
+                        <li><strong>Enhanced Disaster Recovery:</strong> No single point of failure for management, with distributed control planes ensuring continued operation.</li>
+                        <li><strong>Optimized Traffic Patterns:</strong> Local traffic stays local, cross-DC traffic follows optimized paths, and internet traffic uses the nearest exit point.</li>
+                        <li><strong>Scalability:</strong> Each DC can scale independently, new DCs can be added to the architecture, with a consistent policy model regardless of scale.</li>
+                        <li><strong>Security Posture:</strong> Defense-in-depth approach with centralized security policy and distributed enforcement.</li>
+                    </ul>
+                </div>
+
+                <div class="diagram-container">
+                    <h3>Architecture Diagram</h3>
+                    <div class="diagram-controls">
+                        <button id="zoom-in">+</button>
+                        <button id="zoom-out">-</button>
+                        <button id="reset-view">Reset</button>
+                    </div>
+                    <div id="overview-diagram" class="diagram"></div>
+                </div>
+
+                <div class="datacenter-cards">
+                    <div class="datacenter-card">
+                        <h3>North Datacenter</h3>
+                        <p>Active site with direct internet connectivity, handling production workloads and user traffic.</p>
+                        <ul>
+                            <li>Direct internet access</li>
+                            <li>Full ACI fabric</li>
+                            <li>Complete security stack</li>
+                            <li>Application and database tiers</li>
+                        </ul>
+                    </div>
+                    
+                    <div class="datacenter-card">
+                        <h3>South Datacenter</h3>
+                        <p>Active site with direct internet connectivity, handling production workloads and user traffic.</p>
+                        <ul>
+                            <li>Direct internet access</li>
+                            <li>Full ACI fabric</li>
+                            <li>Complete security stack</li>
+                            <li>Application and database tiers</li>
+                        </ul>
+                    </div>
+                    
+                    <div class="datacenter-card">
+                        <h3>Tertiary Control Hub</h3>
+                        <p>Centralized management site without direct internet access, providing orchestration and control.</p>
+                        <ul>
+                            <li>No direct internet access</li>
+                            <li>ACI Multi-Site Orchestrator</li>
+                            <li>Management and monitoring systems</li>
+                            <li>Backup and recovery infrastructure</li>
+                        </ul>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Design Options Section -->
+            <section id="design-options">
+                <h2>Design Options</h2>
+                <p>This section explores the key design options for implementing the Distributed Control with Centralized Management architecture, with detailed justifications for each choice.</p>
+                
+                <div class="tab-container">
+                    <div class="tab-buttons">
+                        <button class="tab-button active" data-tab="internet-edge-options">Internet Edge</button>
+                        <button class="tab-button" data-tab="inter-dc-options">Inter-DC Connectivity</button>
+                        <button class="tab-button" data-tab="aci-options">ACI Implementation</button>
+                        <button class="tab-button" data-tab="security-options">Security Architecture</button>
+                    </div>
+                    
+                    <div class="tab-content active" id="internet-edge-options">
+                        <h3>Internet Edge Design Options</h3>
+                        <p>The Internet Edge zone provides connectivity between the datacenter and the internet, handling ingress and egress traffic.</p>
+                        
+                        <div class="diagram-container">
+                            <div id="internet-edge-diagram" class="diagram"></div>
+                        </div>
+                        
+                        <div class="options-comparison">
+                            <div class="option">
+                                <h4>Option 1: Dedicated Border Routing</h4>
+                                <div class="pros-cons">
+                                    <div class="pros">
+                                        <h5>Pros</h5>
+                                        <ul>
+                                            <li>Clear separation of routing and security functions</li>
+                                            <li>Specialized devices for each function</li>
+                                            <li>Better scalability for high bandwidth requirements</li>
+                                        </ul>
+                                    </div>
+                                    <div class="cons">
+                                        <h5>Cons</h5>
+                                        <ul>
+                                            <li>More devices to manage</li>
+                                            <li>Higher cost</li>
+                                            <li>More complex traffic flow</li>
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="option">
+                                <h4>Option 2: Integrated Edge</h4>
+                                <div class="pros-cons">
+                                    <div class="pros">
+                                        <h5>Pros</h5>
+                                        <ul>
+                                            <li>Simplified architecture</li>
+                                            <li>Fewer devices to manage</li>
+                                            <li>Lower cost</li>
+                                        </ul>
+                                    </div>
+                                    <div class="cons">
+                                        <h5>Cons</h5>
+                                        <ul>
+                                            <li>Less specialized functionality</li>
+                                            <li>Potential performance bottlenecks</li>
+                                            <li>Limited scalability</li>
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="recommendation">
+                            <h4>Recommendation</h4>
+                            <p><strong>Dedicated Border Routing</strong> is recommended for this architecture to ensure clear separation of functions and better scalability for the active-active DC-DR setup.</p>
+                        </div>
+                    </div>
+                    
+                    <div class="tab-content" id="inter-dc-options">
+                        <h3>Inter-Datacenter Connectivity Options</h3>
+                        <p>Inter-datacenter connectivity is critical for ensuring data synchronization, application consistency, and management traffic between the three datacenters.</p>
+                        
+                        <div class="diagram-container">
+                            <div id="inter-dc-diagram" class="diagram"></div>
+                        </div>
+                        
+                        <div class="recommendation">
+                            <h4>Recommendation</h4>
+                            <p><strong>Dark Fiber Primary with MPLS Backup</strong> is recommended for this architecture to ensure lowest latency and highest bandwidth for critical inter-datacenter traffic.</p>
+                        </div>
+                    </div>
+                    
+                    <div class="tab-content" id="aci-options">
+                        <h3>ACI Implementation Options</h3>
+                        <p>Cisco Application Centric Infrastructure (ACI) provides the foundation for network policy and automation across the three datacenters.</p>
+                        
+                        <div class="diagram-container">
+                            <div id="aci-diagram" class="diagram"></div>
+                        </div>
+                        
+                        <div class="recommendation">
+                            <h4>Recommendation</h4>
+                            <p><strong>Centralized MSO in Tertiary DC</strong> is recommended for this architecture to provide consistent policy management and clear separation of control plane.</p>
+                        </div>
+                    </div>
+                    
+                    <div class="tab-content" id="security-options">
+                        <h3>Security Architecture Options</h3>
+                        <p>Security architecture defines how protection is implemented across the three datacenters, with different approaches to segmentation and access control.</p>
+                        
+                        <div class="diagram-container">
+                            <div id="security-diagram" class="diagram"></div>
+                        </div>
+                        
+                        <div class="recommendation">
+                            <h4>Recommendation</h4>
+                            <p><strong>Zero-Trust Security</strong> is recommended for this architecture to provide comprehensive protection with micro-segmentation and identity-based access controls.</p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Device Placement Section -->
+            <section id="device-placement">
+                <h2>Device Placement</h2>
+                <p>This section details the recommended device placement for each datacenter, with justifications for placement decisions and connectivity specifications.</p>
+                
+                <div class="tab-container">
+                    <div class="tab-buttons">
+                        <button class="tab-button active" data-tab="north-south-placement">North/South Datacenters</button>
+                        <button class="tab-button" data-tab="tertiary-placement">Tertiary Control Hub</button>
+                    </div>
+                    
+                    <div class="tab-content active" id="north-south-placement">
+                        <h3>North/South Datacenter Device Placement</h3>
+                        <p>The North and South datacenters have identical device placement to ensure consistent operations and simplified disaster recovery.</p>
+                        
+                        <div class="diagram-container">
+                            <div id="north-south-placement-diagram" class="diagram"></div>
+                        </div>
+                        
+                        <div class="collapsible-container">
+                            <h4 class="collapsible">Internet Edge Zone</h4>
+                            <div class="collapsible-content">
+                                <p>Border Routers, DDoS Protection Systems, External Load Balancers</p>
+                            </div>
+                            
+                            <h4 class="collapsible">DMZ Zone</h4>
+                            <div class="collapsible-content">
+                                <p>DMZ Firewalls, Web Application Firewalls, Reverse Proxies</p>
+                            </div>
+                            
+                            <h4 class="collapsible">Core Network Zone</h4>
+                            <div class="collapsible-content">
+                                <p>Core Switches, Core Firewalls, Internal Load Balancers</p>
+                            </div>
+                            
+                            <h4 class="collapsible">ACI Fabric Zone</h4>
+                            <div class="collapsible-content">
+                                <p>Spine Switches, Leaf Switches, APIC Controllers</p>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="tab-content" id="tertiary-placement">
+                        <h3>Tertiary Control Hub Device Placement</h3>
+                        <p>The Tertiary Control Hub focuses on management, orchestration, and backup functions without direct internet connectivity.</p>
+                        
+                        <div class="diagram-container">
+                            <div id="tertiary-placement-diagram" class="diagram"></div>
+                        </div>
+                        
+                        <div class="collapsible-container">
+                            <h4 class="collapsible">Core Network Zone</h4>
+                            <div class="collapsible-content">
+                                <p>Core Switches, Core Firewalls, Internal Load Balancers</p>
+                            </div>
+                            
+                            <h4 class="collapsible">Centralized Management Zone</h4>
+                            <div class="collapsible-content">
+                                <p>Network Management Systems, Security Operations Center, Automation and Orchestration</p>
+                            </div>
+                            
+                            <h4 class="collapsible">ACI Multi-Site Orchestrator Zone</h4>
+                            <div class="collapsible-content">
+                                <p>Multi-Site Orchestrator, APIC Controllers</p>
+                            </div>
+                            
+                            <h4 class="collapsible">Backup and Recovery Zone</h4>
+                            <div class="collapsible-content">
+                                <p>Backup Servers, DR Orchestration, Configuration Archives</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Connectivity Section -->
+            <section id="connectivity">
+                <h2>Connectivity Patterns</h2>
+                <p>This section details the connectivity patterns between datacenters, including options for different types of links and their justifications.</p>
+                
+                <div class="diagram-container">
+                    <h3>Connectivity Overview</h3>
+                    <div id="connectivity-overview-diagram" class="diagram"></div>
+                </div>
+                
+                <div class="tab-container">
+                    <div class="tab-buttons">
+                        <button class="tab-button active" data-tab="primary-connectivity">Primary Connectivity</button>
+                        <button class="tab-button" data-tab="backup-connectivity">Backup Connectivity</button>
+                        <button class="tab-button" data-tab="internet-connectivity">Internet Connectivity</button>
+                        <button class="tab-button" data-tab="user-connectivity">User Connectivity</button>
+                    </div>
+                    
+                    <div class="tab-content active" id="primary-connectivity">
+                        <h3>Primary Connectivity: Dark Fiber</h3>
+                        <p>Dark fiber provides the highest bandwidth and lowest latency for inter-datacenter connectivity.</p>
+                        
+                        <div class="diagram-container">
+                            <div id="dark-fiber-diagram" class="diagram"></div>
+                        </div>
+                    </div>
+                    
+                    <div class="tab-content" id="backup-connectivity">
+                        <h3>Backup Connectivity: MPLS</h3>
+                        <p>MPLS provides reliable backup connectivity with carrier-grade SLAs.</p>
+                        
+                        <div class="diagram-container">
+                            <div id="mpls-diagram" class="diagram"></div>
+                        </div>
+                    </div>
+                    
+                    <div class="tab-content" id="internet-connectivity">
+                        <h3>Internet Connectivity</h3>
+                        <p>Internet connectivity is provided directly to North and South datacenters, with Tertiary Hub accessing internet through these datacenters.</p>
+                    </div>
+                    
+                    <div class="tab-content" id="user-connectivity">
+                        <h3>User Connectivity Options</h3>
+                        <p>Different user types connect to the datacenters through various connectivity options.</p>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Traffic Flows Section -->
+            <section id="traffic-flows">
+                <h2>Traffic Flows</h2>
+                <p>This section details the traffic flow patterns between datacenters and to/from users, with justifications for routing decisions.</p>
+                
+                <div class="tab-container">
+                    <div class="tab-buttons">
+                        <button class="tab-button active" data-tab="north-south-flow">North-South Traffic</button>
+                        <button class="tab-button" data-tab="east-west-flow">East-West Traffic</button>
+                        <button class="tab-button" data-tab="management-flow">Management Traffic</button>
+                        <button class="tab-button" data-tab="user-access-flow">User Access Patterns</button>
+                    </div>
+                    
+                    <div class="tab-content active" id="north-south-flow">
+                        <h3>North-South Traffic Flow (Internet Ingress/Egress)</h3>
+                        <p>Traffic flowing between the internet and the datacenters, passing through security zones.</p>
+                        
+                        <div class="diagram-container">
+                            <div id="north-south-flow-diagram" class="diagram"></div>
+                        </div>
+                    </div>
+                    
+                    <div class="tab-content" id="east-west-flow">
+                        <h3>East-West Traffic Flow (Inter-Datacenter)</h3>
+                        <p>Traffic flowing between datacenters for application synchronization and data replication.</p>
+                        
+                        <div class="diagram-container">
+                            <div id="east-west-flow-diagram" class="diagram"></div>
+                        </div>
+                    </div>
+                    
+                    <div class="tab-content" id="management-flow">
+                        <h3>Management Traffic Flow</h3>
+                        <p>Traffic flowing between the Tertiary Control Hub and the North/South datacenters for management purposes.</p>
+                        
+                        <div class="diagram-container">
+                            <div id="management-flow-diagram" class="diagram"></div>
+                        </div>
+                    </div>
+                    
+                    <div class="tab-content" id="user-access-flow">
+                        <h3>User Access Patterns</h3>
+                        <p>Traffic flowing from different user types (campus, branch, enterprise, remote) to the datacenters.</p>
+                        
+                        <div class="diagram-container">
+                            <div id="user-access-flow-diagram" class="diagram"></div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Security Section -->
+            <section id="security">
+                <h2>Security Architecture</h2>
+                <p>This section details the security architecture across the three datacenters, with focus on zone separation and security controls.</p>
+                
+                <div class="diagram-container">
+                    <div id="security-architecture-diagram" class="diagram"></div>
+                </div>
+                
+                <div class="collapsible-container">
+                    <h4 class="collapsible">Internet Edge to DMZ</h4>
+                    <div class="collapsible-content">
+                        <p>Stateful inspection firewalls, Application-layer filtering, DDoS mitigation, TLS inspection, IP reputation filtering</p>
+                    </div>
+                    
+                    <h4 class="collapsible">DMZ to Internal</h4>
+                    <div class="collapsible-content">
+                        <p>Next-generation firewalls, Micro-segmentation, Application-aware inspection, User-based access controls</p>
+                    </div>
+                    
+                    <h4 class="collapsible">Between Application Tiers</h4>
+                    <div class="collapsible-content">
+                        <p>ACI contracts, Stateful inspection, Application dependency mapping, Zero-trust enforcement</p>
+                    </div>
+                    
+                    <h4 class="collapsible">Management Access</h4>
+                    <div class="collapsible-content">
+                        <p>Jump servers, Multi-factor authentication, Privileged access management, Session recording</p>
+                    </div>
+                    
+                    <h4 class="collapsible">Inter-DC Security</h4>
+                    <div class="collapsible-content">
+                        <p>Encrypted inter-DC links (MACsec/IPsec), Mutual authentication for all control traffic, Separate control and data planes, Dedicated security monitoring</p>
+                    </div>
+                </div>
+            </section>
+
+            <!-- ACI Implementation Section -->
+            <section id="aci-implementation">
+                <h2>ACI Implementation</h2>
+                <p>This section details the ACI implementation across the three datacenters, with focus on policy management and fabric design.</p>
+                
+                <div class="diagram-container">
+                    <div id="aci-implementation-diagram" class="diagram"></div>
+                </div>
+                
+                <div class="collapsible-container">
+                    <h4 class="collapsible">ACI Fabric Design</h4>
+                    <div class="collapsible-content">
+                        <p>Spine-leaf architecture, VXLAN overlay, Multi-pod design, Layer 3 out connectivity</p>
+                    </div>
+                    
+                    <h4 class="collapsible">Multi-Site Orchestrator</h4>
+                    <div class="collapsible-content">
+                        <p>Centralized policy management, Cross-site networking, Consistent security enforcement, Schema-based configuration</p>
+                    </div>
+                    
+                    <h4 class="collapsible">Application Profiles</h4>
+                    <div class="collapsible-content">
+                        <p>Endpoint groups, Contracts, Filters, Service graph templates</p>
+                    </div>
+                    
+                    <h4 class="collapsible">Integration with External Systems</h4>
+                    <div class="collapsible-content">
+                        <p>VMware integration, Kubernetes integration, L4-7 service integration, Monitoring integration</p>
+                    </div>
+                </div>
+            </section>
+        </main>
+    </div>
+
+    <footer>
+        <p>Network Architecture Design Guide - Option 2: Distributed Control with Centralized Management</p>
+    </footer>
+
+    <!-- JavaScript for interactive functionality -->
+    <script src="js/design-guide.js"></script>
+    
+    <!-- Load D3.js diagram scripts -->
+    <script src="js/diagrams/overview-diagram.js"></script>
+    <script src="js/diagrams/device-placement-diagram.js"></script>
+    <script src="js/diagrams/connectivity-diagram.js"></script>
+    <script src="js/diagrams/traffic-flow-diagram.js"></script>
+    <script src="js/diagrams/design-option-diagrams.js"></script>
+</body>
+</html>
