@@ -1,0 +1,343 @@
+<section id="connectivity">
+    <h2>Connectivity</h2>
+    
+    <div class="tab-container">
+        <div class="tab-buttons">
+            <button class="tab-button active" data-tab="connectivity-overview">Overview</button>
+            <button class="tab-button" data-tab="connectivity-interdc">Inter-DC Connectivity</button>
+            <button class="tab-button" data-tab="connectivity-external">External Connectivity</button>
+            <button class="tab-button" data-tab="connectivity-campus">Campus & Branch</button>
+        </div>
+
+        <div id="connectivity-overview" class="tab-content active">
+            <h3>Connectivity Overview</h3>
+            
+            <p>The connectivity architecture provides resilient, high-performance networking between all three datacenters, as well as to external networks, campus locations, and branch offices.</p>
+            
+            <div class="diagram-container">
+                <div class="diagram" id="connectivity-overview-diagram">
+                    <!-- Connectivity Overview diagram will be rendered by JavaScript -->
+                </div>
+            </div>
+            
+            <h4>Connectivity Types</h4>
+            <table>
+                <tr>
+                    <th>Type</th>
+                    <th>Primary Technology</th>
+                    <th>Backup Technology</th>
+                    <th>Key Features</th>
+                </tr>
+                <tr>
+                    <td>Inter-Datacenter</td>
+                    <td>Dark Fiber</td>
+                    <td>MPLS</td>
+                    <td>High Bandwidth, Low Latency, Redundant Paths</td>
+                </tr>
+                <tr>
+                    <td>Internet</td>
+                    <td>Dual ISP</td>
+                    <td>SD-WAN Overlay</td>
+                    <td>BGP Multihoming, DDoS Protection, Load Balancing</td>
+                </tr>
+                <tr>
+                    <td>Campus</td>
+                    <td>MPLS</td>
+                    <td>SD-WAN</td>
+                    <td>QoS, Traffic Engineering, Redundant Paths</td>
+                </tr>
+                <tr>
+                    <td>Branch</td>
+                    <td>SD-WAN</td>
+                    <td>Internet VPN</td>
+                    <td>Dynamic Path Selection, Application-Aware Routing</td>
+                </tr>
+                <tr>
+                    <td>Enterprise</td>
+                    <td>MPLS</td>
+                    <td>Dark Fiber</td>
+                    <td>High Bandwidth, SLA-Backed, Secure</td>
+                </tr>
+            </table>
+        </div>
+
+        <div id="connectivity-interdc" class="tab-content">
+            <h3>Inter-Datacenter Connectivity</h3>
+            
+            <p>The three datacenters are interconnected using a combination of Dark Fiber, MPLS, and SD-WAN technologies to provide resilient, high-performance connectivity.</p>
+            
+            <div class="diagram-container">
+                <div class="diagram" id="connectivity-interdc-diagram">
+                    <!-- Inter-DC Connectivity diagram will be rendered by JavaScript -->
+                </div>
+            </div>
+            
+            <h4>Primary Connectivity: Dark Fiber</h4>
+            <table>
+                <tr>
+                    <th>Link</th>
+                    <th>Capacity</th>
+                    <th>Distance</th>
+                    <th>Latency</th>
+                    <th>Redundancy</th>
+                </tr>
+                <tr>
+                    <td>North DC to South DC</td>
+                    <td>2 x 100G</td>
+                    <td>50 km</td>
+                    <td>&lt; 1 ms</td>
+                    <td>Diverse Path Routing</td>
+                </tr>
+                <tr>
+                    <td>North DC to Tertiary DC</td>
+                    <td>2 x 100G</td>
+                    <td>30 km</td>
+                    <td>&lt; 0.5 ms</td>
+                    <td>Diverse Path Routing</td>
+                </tr>
+                <tr>
+                    <td>South DC to Tertiary DC</td>
+                    <td>2 x 100G</td>
+                    <td>40 km</td>
+                    <td>&lt; 0.8 ms</td>
+                    <td>Diverse Path Routing</td>
+                </tr>
+            </table>
+            
+            <h4>Backup Connectivity: MPLS</h4>
+            <table>
+                <tr>
+                    <th>Link</th>
+                    <th>Capacity</th>
+                    <th>Provider</th>
+                    <th>SLA</th>
+                    <th>QoS</th>
+                </tr>
+                <tr>
+                    <td>North DC to South DC</td>
+                    <td>2 x 10G</td>
+                    <td>Primary MPLS Provider</td>
+                    <td>99.99% Availability, &lt; 10ms Latency</td>
+                    <td>Voice, Video, Data Classes</td>
+                </tr>
+                <tr>
+                    <td>North DC to Tertiary DC</td>
+                    <td>2 x 10G</td>
+                    <td>Primary MPLS Provider</td>
+                    <td>99.99% Availability, &lt; 10ms Latency</td>
+                    <td>Voice, Video, Data Classes</td>
+                </tr>
+                <tr>
+                    <td>South DC to Tertiary DC</td>
+                    <td>2 x 10G</td>
+                    <td>Primary MPLS Provider</td>
+                    <td>99.99% Availability, &lt; 10ms Latency</td>
+                    <td>Voice, Video, Data Classes</td>
+                </tr>
+            </table>
+            
+            <h4>Tertiary Connectivity: SD-WAN</h4>
+            <table>
+                <tr>
+                    <th>Link</th>
+                    <th>Capacity</th>
+                    <th>Transport</th>
+                    <th>Features</th>
+                    <th>Security</th>
+                </tr>
+                <tr>
+                    <td>All DCs</td>
+                    <td>Variable</td>
+                    <td>Internet, MPLS, 4G/5G</td>
+                    <td>Dynamic Path Selection, Application-Aware Routing</td>
+                    <td>IPsec Encryption, Zero Trust</td>
+                </tr>
+            </table>
+            
+            <h4>Inter-DC Traffic Engineering</h4>
+            <p>Traffic between datacenters is engineered to optimize performance, reliability, and cost:</p>
+            <ul>
+                <li><strong>Critical Applications:</strong> Dark Fiber with MPLS Backup</li>
+                <li><strong>Bulk Data Transfer:</strong> Dark Fiber with QoS</li>
+                <li><strong>Management Traffic:</strong> Out-of-Band Management Network</li>
+                <li><strong>Replication Traffic:</strong> Dedicated VLAN with QoS</li>
+            </ul>
+        </div>
+
+        <div id="connectivity-external" class="tab-content">
+            <h3>External Connectivity</h3>
+            
+            <p>The North and South datacenters provide direct internet connectivity, while the Tertiary Control Hub accesses the internet through the North or South DC when needed.</p>
+            
+            <div class="diagram-container">
+                <div class="diagram" id="connectivity-external-diagram">
+                    <!-- External Connectivity diagram will be rendered by JavaScript -->
+                </div>
+            </div>
+            
+            <h4>Internet Connectivity</h4>
+            <table>
+                <tr>
+                    <th>Datacenter</th>
+                    <th>ISP 1</th>
+                    <th>ISP 2</th>
+                    <th>BGP Configuration</th>
+                    <th>DDoS Protection</th>
+                </tr>
+                <tr>
+                    <td>North DC</td>
+                    <td>100 Gbps</td>
+                    <td>100 Gbps</td>
+                    <td>Full Tables, AS Path Prepending</td>
+                    <td>40 Gbps Mitigation</td>
+                </tr>
+                <tr>
+                    <td>South DC</td>
+                    <td>100 Gbps</td>
+                    <td>100 Gbps</td>
+                    <td>Full Tables, AS Path Prepending</td>
+                    <td>40 Gbps Mitigation</td>
+                </tr>
+                <tr>
+                    <td>Tertiary DC</td>
+                    <td>Via North DC</td>
+                    <td>Via South DC</td>
+                    <td>Policy-Based Routing</td>
+                    <td>Via North/South DC</td>
+                </tr>
+            </table>
+            
+            <h4>Global Load Balancing</h4>
+            <table>
+                <tr>
+                    <th>Service</th>
+                    <th>Load Balancing Method</th>
+                    <th>Failover Strategy</th>
+                    <th>Health Checks</th>
+                </tr>
+                <tr>
+                    <td>Web Applications</td>
+                    <td>DNS-Based GSLB</td>
+                    <td>Automatic Failover</td>
+                    <td>HTTP/HTTPS, TCP</td>
+                </tr>
+                <tr>
+                    <td>API Services</td>
+                    <td>Anycast</td>
+                    <td>BGP Route Manipulation</td>
+                    <td>HTTP/HTTPS, TCP</td>
+                </tr>
+                <tr>
+                    <td>Email</td>
+                    <td>MX Record Priority</td>
+                    <td>Manual Failover</td>
+                    <td>SMTP, TCP</td>
+                </tr>
+            </table>
+        </div>
+
+        <div id="connectivity-campus" class="tab-content">
+            <h3>Campus & Branch Connectivity</h3>
+            
+            <p>Campus locations and branch offices connect to the three datacenters using a combination of MPLS, SD-WAN, and Internet VPN technologies.</p>
+            
+            <div class="diagram-container">
+                <div class="diagram" id="connectivity-campus-diagram">
+                    <!-- Campus & Branch Connectivity diagram will be rendered by JavaScript -->
+                </div>
+            </div>
+            
+            <h4>Campus Connectivity</h4>
+            <table>
+                <tr>
+                    <th>Campus Type</th>
+                    <th>Primary Connection</th>
+                    <th>Backup Connection</th>
+                    <th>Bandwidth</th>
+                    <th>QoS</th>
+                </tr>
+                <tr>
+                    <td>Large Campus</td>
+                    <td>Dark Fiber</td>
+                    <td>MPLS</td>
+                    <td>10-100 Gbps</td>
+                    <td>Voice, Video, Data, Management</td>
+                </tr>
+                <tr>
+                    <td>Medium Campus</td>
+                    <td>MPLS</td>
+                    <td>SD-WAN</td>
+                    <td>1-10 Gbps</td>
+                    <td>Voice, Video, Data, Management</td>
+                </tr>
+                <tr>
+                    <td>Small Campus</td>
+                    <td>SD-WAN</td>
+                    <td>Internet VPN</td>
+                    <td>100 Mbps - 1 Gbps</td>
+                    <td>Voice, Video, Data</td>
+                </tr>
+            </table>
+            
+            <h4>Branch Connectivity</h4>
+            <table>
+                <tr>
+                    <th>Branch Type</th>
+                    <th>Primary Connection</th>
+                    <th>Backup Connection</th>
+                    <th>Bandwidth</th>
+                    <th>Features</th>
+                </tr>
+                <tr>
+                    <td>Large Branch</td>
+                    <td>SD-WAN (MPLS + Internet)</td>
+                    <td>4G/5G</td>
+                    <td>100 Mbps - 1 Gbps</td>
+                    <td>Local Internet Breakout, Direct Cloud Access</td>
+                </tr>
+                <tr>
+                    <td>Medium Branch</td>
+                    <td>SD-WAN (Internet)</td>
+                    <td>4G/5G</td>
+                    <td>50-100 Mbps</td>
+                    <td>Local Internet Breakout, Direct Cloud Access</td>
+                </tr>
+                <tr>
+                    <td>Small Branch</td>
+                    <td>Internet VPN</td>
+                    <td>4G/5G</td>
+                    <td>10-50 Mbps</td>
+                    <td>Local Internet Breakout</td>
+                </tr>
+            </table>
+            
+            <h4>Remote User Connectivity</h4>
+            <table>
+                <tr>
+                    <th>User Type</th>
+                    <th>Connection Method</th>
+                    <th>Authentication</th>
+                    <th>Features</th>
+                </tr>
+                <tr>
+                    <td>Corporate Laptop</td>
+                    <td>Always-On VPN</td>
+                    <td>Certificate + MFA</td>
+                    <td>Split Tunneling, Posture Assessment</td>
+                </tr>
+                <tr>
+                    <td>Mobile Device</td>
+                    <td>Mobile VPN</td>
+                    <td>Certificate + MFA</td>
+                    <td>Per-App VPN, Conditional Access</td>
+                </tr>
+                <tr>
+                    <td>Contractor</td>
+                    <td>SSL VPN Portal</td>
+                    <td>Username/Password + MFA</td>
+                    <td>Limited Access, Session Recording</td>
+                </tr>
+            </table>
+        </div>
+    </div>
+</section>
