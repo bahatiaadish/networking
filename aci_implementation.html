@@ -1,0 +1,384 @@
+<section id="aci-implementation">
+    <h2>ACI Implementation</h2>
+    
+    <div class="tab-container">
+        <div class="tab-buttons">
+            <button class="tab-button active" data-tab="aci-overview">Overview</button>
+            <button class="tab-button" data-tab="aci-multisite">Multi-Site Configuration</button>
+            <button class="tab-button" data-tab="aci-objects">ACI Objects</button>
+            <button class="tab-button" data-tab="aci-policies">Policies & Contracts</button>
+        </div>
+
+        <div id="aci-overview" class="tab-content active">
+            <h3>ACI Implementation Overview</h3>
+            
+            <p>The ACI implementation spans all three datacenters with a Multi-Site Orchestrator (MSO) located in the Tertiary Control Hub. Each datacenter has its own ACI fabric with local APIC controllers, while the MSO provides centralized policy management and orchestration.</p>
+            
+            <div class="diagram-container">
+                <div class="diagram" id="aci-overview-diagram">
+                    <!-- ACI Overview diagram will be rendered by JavaScript -->
+                </div>
+            </div>
+            
+            <h4>ACI Fabric Components</h4>
+            <table>
+                <tr>
+                    <th>Component</th>
+                    <th>North DC</th>
+                    <th>South DC</th>
+                    <th>Tertiary DC</th>
+                </tr>
+                <tr>
+                    <td>APIC Controllers</td>
+                    <td>3</td>
+                    <td>3</td>
+                    <td>3</td>
+                </tr>
+                <tr>
+                    <td>Spine Switches</td>
+                    <td>4</td>
+                    <td>4</td>
+                    <td>2</td>
+                </tr>
+                <tr>
+                    <td>Leaf Switches</td>
+                    <td>24</td>
+                    <td>24</td>
+                    <td>12</td>
+                </tr>
+                <tr>
+                    <td>Border Leaf Switches</td>
+                    <td>4</td>
+                    <td>4</td>
+                    <td>4</td>
+                </tr>
+            </table>
+            
+            <h4>ACI Software Versions</h4>
+            <table>
+                <tr>
+                    <th>Component</th>
+                    <th>Version</th>
+                    <th>Notes</th>
+                </tr>
+                <tr>
+                    <td>APIC</td>
+                    <td>5.2(3e)</td>
+                    <td>Latest recommended version with Multi-Site support</td>
+                </tr>
+                <tr>
+                    <td>Switch NX-OS</td>
+                    <td>15.2(3e)</td>
+                    <td>Matching version for APIC 5.2(3e)</td>
+                </tr>
+                <tr>
+                    <td>Multi-Site Orchestrator</td>
+                    <td>3.3(1)</td>
+                    <td>Compatible with APIC 5.2(3e)</td>
+                </tr>
+            </table>
+        </div>
+
+        <div id="aci-multisite" class="tab-content">
+            <h3>ACI Multi-Site Configuration</h3>
+            
+            <p>The Multi-Site Orchestrator (MSO) provides centralized policy management across all three ACI fabrics. It enables consistent policy deployment, cross-site networking, and simplified operations.</p>
+            
+            <div class="diagram-container">
+                <div class="diagram" id="aci-multisite-diagram">
+                    <!-- ACI Multi-Site diagram will be rendered by JavaScript -->
+                </div>
+            </div>
+            
+            <h4>Multi-Site Architecture</h4>
+            <p>The Multi-Site architecture consists of the following components:</p>
+            <ul>
+                <li><strong>Multi-Site Orchestrator (MSO):</strong> Centralized policy management platform located in the Tertiary Control Hub</li>
+                <li><strong>Inter-Site Network (ISN):</strong> Dedicated network infrastructure for communication between ACI fabrics</li>
+                <li><strong>Site-Local APIC Clusters:</strong> Local control plane for each ACI fabric</li>
+                <li><strong>Spine Proxy:</strong> Handles inter-site VXLAN traffic</li>
+            </ul>
+            
+            <div class="tree-view">
+                <div class="tree-item">
+                    <span class="tree-toggle">Multi-Site Orchestrator</span>
+                    <div class="tree-content">
+                        <div class="tree-item">
+                            <span class="tree-toggle">Sites</span>
+                            <div class="tree-content">
+                                <div>North DC (Site ID: 1)</div>
+                                <div>South DC (Site ID: 2)</div>
+                                <div>Tertiary DC (Site ID: 3)</div>
+                            </div>
+                        </div>
+                        <div class="tree-item">
+                            <span class="tree-toggle">Templates</span>
+                            <div class="tree-content">
+                                <div>Common Template</div>
+                                <div>North-South Template</div>
+                                <div>Tertiary Template</div>
+                            </div>
+                        </div>
+                        <div class="tree-item">
+                            <span class="tree-toggle">Schemas</span>
+                            <div class="tree-content">
+                                <div>Common Schema</div>
+                                <div>Production Schema</div>
+                                <div>Management Schema</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <h4>Multi-Site Policies</h4>
+            <table>
+                <tr>
+                    <th>Policy Type</th>
+                    <th>Description</th>
+                    <th>Scope</th>
+                </tr>
+                <tr>
+                    <td>Stretched VRF</td>
+                    <td>VRF instances that span multiple sites</td>
+                    <td>All Sites</td>
+                </tr>
+                <tr>
+                    <td>Stretched BD</td>
+                    <td>Bridge Domains that span multiple sites</td>
+                    <td>North DC, South DC</td>
+                </tr>
+                <tr>
+                    <td>Stretched EPG</td>
+                    <td>Endpoint Groups that span multiple sites</td>
+                    <td>North DC, South DC</td>
+                </tr>
+                <tr>
+                    <td>Site-Local EPG</td>
+                    <td>Endpoint Groups specific to a single site</td>
+                    <td>Site-Specific</td>
+                </tr>
+            </table>
+        </div>
+
+        <div id="aci-objects" class="tab-content">
+            <h3>ACI Objects</h3>
+            
+            <p>The following section provides details on the key ACI objects used in the implementation with human-readable translations of technical object names.</p>
+            
+            <div class="aci-object">
+                <div class="aci-object-header">
+                    <span class="aci-object-name">fvTenant</span>
+                    <span class="aci-object-type">Fabric Virtual Tenant</span>
+                </div>
+                <div class="aci-object-description">
+                    A tenant is a logical container for application policies that enables an administrator to exercise domain-based access control.
+                </div>
+                <div class="aci-object-attributes">
+                    name: "prod"<br>
+                    descr: "Production Tenant"<br>
+                    dn: "uni/tn-prod"
+                </div>
+            </div>
+            
+            <div class="aci-object">
+                <div class="aci-object-header">
+                    <span class="aci-object-name">fvCtx</span>
+                    <span class="aci-object-type">Fabric Virtual Context (VRF)</span>
+                </div>
+                <div class="aci-object-description">
+                    A VRF is a tenant network (also known as a context or private network). A VRF is a fundamental element in the fabric.
+                </div>
+                <div class="aci-object-attributes">
+                    name: "prod-vrf"<br>
+                    descr: "Production VRF"<br>
+                    dn: "uni/tn-prod/ctx-prod-vrf"
+                </div>
+            </div>
+            
+            <div class="aci-object">
+                <div class="aci-object-header">
+                    <span class="aci-object-name">fvBD</span>
+                    <span class="aci-object-type">Fabric Virtual Bridge Domain</span>
+                </div>
+                <div class="aci-object-description">
+                    A bridge domain represents a L2 forwarding construct within the fabric. It can contain multiple subnets.
+                </div>
+                <div class="aci-object-attributes">
+                    name: "web-bd"<br>
+                    descr: "Web Tier Bridge Domain"<br>
+                    dn: "uni/tn-prod/BD-web-bd"<br>
+                    arpFlood: "yes"<br>
+                    unicastRoute: "yes"
+                </div>
+            </div>
+            
+            <div class="aci-object">
+                <div class="aci-object-header">
+                    <span class="aci-object-name">fvAEPg</span>
+                    <span class="aci-object-type">Fabric Virtual Application Endpoint Group</span>
+                </div>
+                <div class="aci-object-description">
+                    An Application Endpoint Group (EPG) is a collection of endpoints that have common policy requirements such as security, virtual machine mobility, QoS, or Layer 4 to Layer 7 services.
+                </div>
+                <div class="aci-object-attributes">
+                    name: "web-epg"<br>
+                    descr: "Web Tier EPG"<br>
+                    dn: "uni/tn-prod/ap-web/epg-web-epg"
+                </div>
+            </div>
+            
+            <div class="aci-object">
+                <div class="aci-object-header">
+                    <span class="aci-object-name">vzBrCP</span>
+                    <span class="aci-object-type">Virtual Zone Bridge Contract Profile</span>
+                </div>
+                <div class="aci-object-description">
+                    A contract defines the rules that allow or deny communication between EPGs.
+                </div>
+                <div class="aci-object-attributes">
+                    name: "web-to-app"<br>
+                    descr: "Contract for Web to App Communication"<br>
+                    dn: "uni/tn-prod/brc-web-to-app"
+                </div>
+            </div>
+            
+            <div class="aci-object">
+                <div class="aci-object-header">
+                    <span class="aci-object-name">vzFilter</span>
+                    <span class="aci-object-type">Virtual Zone Filter</span>
+                </div>
+                <div class="aci-object-description">
+                    A filter is a container of one or more entries, each specifying a protocol and port range.
+                </div>
+                <div class="aci-object-attributes">
+                    name: "http"<br>
+                    descr: "HTTP Traffic"<br>
+                    dn: "uni/tn-prod/flt-http"
+                </div>
+            </div>
+        </div>
+
+        <div id="aci-policies" class="tab-content">
+            <h3>Policies & Contracts</h3>
+            
+            <p>ACI uses a policy-based model to define connectivity, security, and application requirements. The following section details the key policies and contracts used in the implementation.</p>
+            
+            <h4>Tenant Structure</h4>
+            <table>
+                <tr>
+                    <th>Tenant</th>
+                    <th>Purpose</th>
+                    <th>Scope</th>
+                </tr>
+                <tr>
+                    <td>common</td>
+                    <td>Shared resources and policies</td>
+                    <td>All Sites</td>
+                </tr>
+                <tr>
+                    <td>infra</td>
+                    <td>Infrastructure services</td>
+                    <td>Site-Local</td>
+                </tr>
+                <tr>
+                    <td>mgmt</td>
+                    <td>Management functions</td>
+                    <td>All Sites</td>
+                </tr>
+                <tr>
+                    <td>prod</td>
+                    <td>Production applications</td>
+                    <td>All Sites</td>
+                </tr>
+                <tr>
+                    <td>dev</td>
+                    <td>Development environments</td>
+                    <td>North DC, South DC</td>
+                </tr>
+            </table>
+            
+            <h4>Application Profiles</h4>
+            <table>
+                <tr>
+                    <th>Application Profile</th>
+                    <th>Tenant</th>
+                    <th>Description</th>
+                </tr>
+                <tr>
+                    <td>web</td>
+                    <td>prod</td>
+                    <td>Web tier applications</td>
+                </tr>
+                <tr>
+                    <td>app</td>
+                    <td>prod</td>
+                    <td>Application tier services</td>
+                </tr>
+                <tr>
+                    <td>db</td>
+                    <td>prod</td>
+                    <td>Database tier services</td>
+                </tr>
+                <tr>
+                    <td>security</td>
+                    <td>common</td>
+                    <td>Security services</td>
+                </tr>
+                <tr>
+                    <td>network</td>
+                    <td>common</td>
+                    <td>Network services (DNS, DHCP, etc.)</td>
+                </tr>
+            </table>
+            
+            <h4>Key Contracts</h4>
+            <table>
+                <tr>
+                    <th>Contract</th>
+                    <th>Provider</th>
+                    <th>Consumer</th>
+                    <th>Filters</th>
+                </tr>
+                <tr>
+                    <td>web-to-app</td>
+                    <td>app-epg</td>
+                    <td>web-epg</td>
+                    <td>http, https, custom-app</td>
+                </tr>
+                <tr>
+                    <td>app-to-db</td>
+                    <td>db-epg</td>
+                    <td>app-epg</td>
+                    <td>sql, oracle, mongodb</td>
+                </tr>
+                <tr>
+                    <td>dns</td>
+                    <td>dns-epg</td>
+                    <td>any</td>
+                    <td>dns-udp, dns-tcp</td>
+                </tr>
+                <tr>
+                    <td>internet-access</td>
+                    <td>internet-epg</td>
+                    <td>web-epg</td>
+                    <td>http, https</td>
+                </tr>
+            </table>
+            
+            <h4>L4-L7 Service Integration</h4>
+            <p>The ACI fabric integrates with L4-L7 services using service graphs. The following services are integrated:</p>
+            <ul>
+                <li><strong>Firewalls:</strong> Palo Alto Networks and Cisco Firepower</li>
+                <li><strong>Load Balancers:</strong> F5 BIG-IP</li>
+                <li><strong>Web Application Firewalls:</strong> F5 Advanced WAF</li>
+            </ul>
+            
+            <div class="diagram-container">
+                <div class="diagram" id="aci-service-graph-diagram">
+                    <!-- ACI Service Graph diagram will be rendered by JavaScript -->
+                </div>
+            </div>
+        </div>
+    </div>
+</section>

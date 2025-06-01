@@ -1,0 +1,918 @@
+<section id="physical-architecture">
+    <h2>Physical Architecture</h2>
+    
+    <div class="tab-container">
+        <div class="tab-buttons">
+            <button class="tab-button active" data-tab="physical-north-south">North/South Datacenters</button>
+            <button class="tab-button" data-tab="physical-tertiary">Tertiary Control Hub</button>
+            <button class="tab-button" data-tab="physical-interconnect">Interconnectivity</button>
+        </div>
+
+        <div id="physical-north-south" class="tab-content active">
+            <h3>North/South Datacenter Physical Architecture</h3>
+            
+            <div class="diagram-container">
+                <div class="diagram" id="physical-ns-diagram">
+                    <!-- Physical North/South diagram will be rendered by JavaScript -->
+                </div>
+            </div>
+            
+            <button class="collapsible">Internet Edge Zone</button>
+            <div class="collapsible-content">
+                <h4>Border Routers</h4>
+                <table>
+                    <tr>
+                        <th>Component</th>
+                        <th>Model</th>
+                        <th>Quantity</th>
+                        <th>Specifications</th>
+                        <th>Connectivity</th>
+                    </tr>
+                    <tr>
+                        <td>Border Router</td>
+                        <td>Cisco ASR 9922</td>
+                        <td>2</td>
+                        <td>
+                            <ul>
+                                <li>Redundant Route Processors</li>
+                                <li>Redundant Switch Fabric Cards</li>
+                                <li>4 x 100G Line Cards</li>
+                                <li>8 x 40G Line Cards</li>
+                                <li>BGP Full Tables Support</li>
+                            </ul>
+                        </td>
+                        <td>
+                            <ul>
+                                <li>2 x 100G to ISP 1</li>
+                                <li>2 x 100G to ISP 2</li>
+                                <li>4 x 40G to DDoS Protection</li>
+                                <li>4 x 40G to Core Switches</li>
+                            </ul>
+                        </td>
+                    </tr>
+                </table>
+
+                <h4>DDoS Protection Systems</h4>
+                <table>
+                    <tr>
+                        <th>Component</th>
+                        <th>Model</th>
+                        <th>Quantity</th>
+                        <th>Specifications</th>
+                        <th>Connectivity</th>
+                    </tr>
+                    <tr>
+                        <td>DDoS Protection Appliance</td>
+                        <td>Arbor Networks APS 5500</td>
+                        <td>2</td>
+                        <td>
+                            <ul>
+                                <li>40Gbps Mitigation Capacity</li>
+                                <li>Redundant Power Supplies</li>
+                                <li>Redundant Fans</li>
+                                <li>FPGA-based Traffic Processing</li>
+                            </ul>
+                        </td>
+                        <td>
+                            <ul>
+                                <li>4 x 10G to Border Routers</li>
+                                <li>4 x 10G to External Load Balancers</li>
+                                <li>2 x 1G Management</li>
+                            </ul>
+                        </td>
+                    </tr>
+                </table>
+
+                <h4>External Load Balancers</h4>
+                <table>
+                    <tr>
+                        <th>Component</th>
+                        <th>Model</th>
+                        <th>Quantity</th>
+                        <th>Specifications</th>
+                        <th>Connectivity</th>
+                    </tr>
+                    <tr>
+                        <td>External Load Balancer</td>
+                        <td>F5 BIG-IP i15800</td>
+                        <td>2</td>
+                        <td>
+                            <ul>
+                                <li>80 Gbps L7 Throughput</li>
+                                <li>Redundant Power Supplies</li>
+                                <li>SSL Offloading</li>
+                                <li>DDoS Protection</li>
+                                <li>Active/Active Configuration</li>
+                            </ul>
+                        </td>
+                        <td>
+                            <ul>
+                                <li>4 x 10G to DDoS Protection</li>
+                                <li>4 x 10G to DMZ Firewalls</li>
+                                <li>2 x 1G Management</li>
+                            </ul>
+                        </td>
+                    </tr>
+                </table>
+            </div>
+
+            <button class="collapsible">DMZ Zone</button>
+            <div class="collapsible-content">
+                <h4>DMZ Firewalls</h4>
+                <table>
+                    <tr>
+                        <th>Component</th>
+                        <th>Model</th>
+                        <th>Quantity</th>
+                        <th>Specifications</th>
+                        <th>Connectivity</th>
+                    </tr>
+                    <tr>
+                        <td>DMZ Firewall</td>
+                        <td>Palo Alto PA-7080</td>
+                        <td>2</td>
+                        <td>
+                            <ul>
+                                <li>200 Gbps Firewall Throughput</li>
+                                <li>100 Gbps Threat Prevention</li>
+                                <li>Redundant Power Supplies</li>
+                                <li>Active/Active Configuration</li>
+                            </ul>
+                        </td>
+                        <td>
+                            <ul>
+                                <li>4 x 10G to External Load Balancers</li>
+                                <li>4 x 10G to Web Application Firewalls</li>
+                                <li>4 x 10G to Core Firewalls</li>
+                                <li>2 x 1G Management</li>
+                            </ul>
+                        </td>
+                    </tr>
+                </table>
+
+                <h4>Web Application Firewalls</h4>
+                <table>
+                    <tr>
+                        <th>Component</th>
+                        <th>Model</th>
+                        <th>Quantity</th>
+                        <th>Specifications</th>
+                        <th>Connectivity</th>
+                    </tr>
+                    <tr>
+                        <td>Web Application Firewall</td>
+                        <td>F5 Advanced WAF</td>
+                        <td>2</td>
+                        <td>
+                            <ul>
+                                <li>40 Gbps Throughput</li>
+                                <li>OWASP Top 10 Protection</li>
+                                <li>Bot Defense</li>
+                                <li>API Protection</li>
+                            </ul>
+                        </td>
+                        <td>
+                            <ul>
+                                <li>4 x 10G to DMZ Firewalls</li>
+                                <li>4 x 10G to DMZ Servers</li>
+                                <li>2 x 1G Management</li>
+                            </ul>
+                        </td>
+                    </tr>
+                </table>
+
+                <h4>DMZ Servers</h4>
+                <table>
+                    <tr>
+                        <th>Component</th>
+                        <th>Model</th>
+                        <th>Quantity</th>
+                        <th>Specifications</th>
+                        <th>Connectivity</th>
+                    </tr>
+                    <tr>
+                        <td>Web Server</td>
+                        <td>Cisco UCS C240 M6</td>
+                        <td>8</td>
+                        <td>
+                            <ul>
+                                <li>2 x Intel Xeon Gold 6348</li>
+                                <li>512GB RAM</li>
+                                <li>2 x 1.6TB NVMe SSD</li>
+                                <li>Redundant Power Supplies</li>
+                            </ul>
+                        </td>
+                        <td>
+                            <ul>
+                                <li>2 x 25G to ACI Leaf Switches</li>
+                                <li>2 x 1G Management</li>
+                            </ul>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>Reverse Proxy</td>
+                        <td>Cisco UCS C240 M6</td>
+                        <td>4</td>
+                        <td>
+                            <ul>
+                                <li>2 x Intel Xeon Gold 6348</li>
+                                <li>384GB RAM</li>
+                                <li>2 x 1.6TB NVMe SSD</li>
+                                <li>Redundant Power Supplies</li>
+                            </ul>
+                        </td>
+                        <td>
+                            <ul>
+                                <li>2 x 25G to ACI Leaf Switches</li>
+                                <li>2 x 1G Management</li>
+                            </ul>
+                        </td>
+                    </tr>
+                </table>
+            </div>
+
+            <button class="collapsible">Core Network Zone</button>
+            <div class="collapsible-content">
+                <h4>Core Switches</h4>
+                <table>
+                    <tr>
+                        <th>Component</th>
+                        <th>Model</th>
+                        <th>Quantity</th>
+                        <th>Specifications</th>
+                        <th>Connectivity</th>
+                    </tr>
+                    <tr>
+                        <td>Core Switch</td>
+                        <td>Cisco Nexus 9516</td>
+                        <td>2</td>
+                        <td>
+                            <ul>
+                                <li>Supervisor B modules</li>
+                                <li>Fabric modules</li>
+                                <li>36 x 100G Line Cards</li>
+                                <li>VPC Configuration</li>
+                            </ul>
+                        </td>
+                        <td>
+                            <ul>
+                                <li>4 x 40G to Border Routers</li>
+                                <li>8 x 100G to ACI Spine Switches</li>
+                                <li>4 x 100G to WAN Routers</li>
+                                <li>2 x 1G Management</li>
+                            </ul>
+                        </td>
+                    </tr>
+                </table>
+
+                <h4>Core Firewalls</h4>
+                <table>
+                    <tr>
+                        <th>Component</th>
+                        <th>Model</th>
+                        <th>Quantity</th>
+                        <th>Specifications</th>
+                        <th>Connectivity</th>
+                    </tr>
+                    <tr>
+                        <td>Core Firewall</td>
+                        <td>Cisco Firepower 4120</td>
+                        <td>2</td>
+                        <td>
+                            <ul>
+                                <li>20 Gbps Firewall Throughput</li>
+                                <li>10 Gbps IPS Throughput</li>
+                                <li>Redundant Power Supplies</li>
+                                <li>Active/Standby Configuration</li>
+                            </ul>
+                        </td>
+                        <td>
+                            <ul>
+                                <li>4 x 10G to DMZ Firewalls</li>
+                                <li>4 x 10G to ACI Leaf Switches</li>
+                                <li>2 x 1G Management</li>
+                            </ul>
+                        </td>
+                    </tr>
+                </table>
+            </div>
+
+            <button class="collapsible">ACI Fabric</button>
+            <div class="collapsible-content">
+                <h4>Spine Switches</h4>
+                <table>
+                    <tr>
+                        <th>Component</th>
+                        <th>Model</th>
+                        <th>Quantity</th>
+                        <th>Specifications</th>
+                        <th>Connectivity</th>
+                    </tr>
+                    <tr>
+                        <td>ACI Spine Switch</td>
+                        <td>Cisco Nexus 9364C</td>
+                        <td>4</td>
+                        <td>
+                            <ul>
+                                <li>64 x 100G Ports</li>
+                                <li>Redundant Power Supplies</li>
+                                <li>Redundant Fans</li>
+                                <li>ACI Spine Mode</li>
+                            </ul>
+                        </td>
+                        <td>
+                            <ul>
+                                <li>8 x 100G to Core Switches</li>
+                                <li>48 x 100G to Leaf Switches</li>
+                                <li>2 x 1G Management</li>
+                            </ul>
+                        </td>
+                    </tr>
+                </table>
+
+                <h4>Leaf Switches</h4>
+                <table>
+                    <tr>
+                        <th>Component</th>
+                        <th>Model</th>
+                        <th>Quantity</th>
+                        <th>Specifications</th>
+                        <th>Connectivity</th>
+                    </tr>
+                    <tr>
+                        <td>ACI Leaf Switch</td>
+                        <td>Cisco Nexus 93180YC-FX</td>
+                        <td>24</td>
+                        <td>
+                            <ul>
+                                <li>48 x 10/25G SFP+ Ports</li>
+                                <li>6 x 40/100G QSFP+ Ports</li>
+                                <li>Redundant Power Supplies</li>
+                                <li>Redundant Fans</li>
+                                <li>ACI Leaf Mode</li>
+                            </ul>
+                        </td>
+                        <td>
+                            <ul>
+                                <li>4 x 100G to Spine Switches</li>
+                                <li>48 x 10/25G to Servers</li>
+                                <li>2 x 1G Management</li>
+                            </ul>
+                        </td>
+                    </tr>
+                </table>
+
+                <h4>APIC Controllers</h4>
+                <table>
+                    <tr>
+                        <th>Component</th>
+                        <th>Model</th>
+                        <th>Quantity</th>
+                        <th>Specifications</th>
+                        <th>Connectivity</th>
+                    </tr>
+                    <tr>
+                        <td>APIC Controller</td>
+                        <td>Cisco APIC M3</td>
+                        <td>3</td>
+                        <td>
+                            <ul>
+                                <li>2 x Intel Xeon CPU</li>
+                                <li>128GB RAM</li>
+                                <li>2 x 960GB SSD</li>
+                                <li>Redundant Power Supplies</li>
+                            </ul>
+                        </td>
+                        <td>
+                            <ul>
+                                <li>2 x 10G to ACI Leaf Switches</li>
+                                <li>2 x 1G Management</li>
+                            </ul>
+                        </td>
+                    </tr>
+                </table>
+            </div>
+
+            <button class="collapsible">Compute Zone</button>
+            <div class="collapsible-content">
+                <h4>Application Servers</h4>
+                <table>
+                    <tr>
+                        <th>Component</th>
+                        <th>Model</th>
+                        <th>Quantity</th>
+                        <th>Specifications</th>
+                        <th>Connectivity</th>
+                    </tr>
+                    <tr>
+                        <td>Application Server</td>
+                        <td>Cisco UCS C240 M6</td>
+                        <td>32</td>
+                        <td>
+                            <ul>
+                                <li>2 x Intel Xeon Gold 6348</li>
+                                <li>768GB RAM</li>
+                                <li>2 x 1.6TB NVMe SSD</li>
+                                <li>Redundant Power Supplies</li>
+                            </ul>
+                        </td>
+                        <td>
+                            <ul>
+                                <li>2 x 25G to ACI Leaf Switches</li>
+                                <li>2 x 1G Management</li>
+                            </ul>
+                        </td>
+                    </tr>
+                </table>
+
+                <h4>Database Servers</h4>
+                <table>
+                    <tr>
+                        <th>Component</th>
+                        <th>Model</th>
+                        <th>Quantity</th>
+                        <th>Specifications</th>
+                        <th>Connectivity</th>
+                    </tr>
+                    <tr>
+                        <td>Database Server</td>
+                        <td>Cisco UCS C480 M6</td>
+                        <td>16</td>
+                        <td>
+                            <ul>
+                                <li>4 x Intel Xeon Platinum 8380</li>
+                                <li>2TB RAM</li>
+                                <li>8 x 1.6TB NVMe SSD</li>
+                                <li>Redundant Power Supplies</li>
+                            </ul>
+                        </td>
+                        <td>
+                            <ul>
+                                <li>2 x 25G to ACI Leaf Switches</li>
+                                <li>2 x 32G FC to SAN Switches</li>
+                                <li>2 x 1G Management</li>
+                            </ul>
+                        </td>
+                    </tr>
+                </table>
+            </div>
+
+            <button class="collapsible">Storage Zone</button>
+            <div class="collapsible-content">
+                <h4>SAN Switches</h4>
+                <table>
+                    <tr>
+                        <th>Component</th>
+                        <th>Model</th>
+                        <th>Quantity</th>
+                        <th>Specifications</th>
+                        <th>Connectivity</th>
+                    </tr>
+                    <tr>
+                        <td>SAN Switch</td>
+                        <td>Cisco MDS 9710</td>
+                        <td>2</td>
+                        <td>
+                            <ul>
+                                <li>48-Port 32G FC Line Cards</li>
+                                <li>Redundant Supervisors</li>
+                                <li>Redundant Power Supplies</li>
+                                <li>Redundant Fans</li>
+                            </ul>
+                        </td>
+                        <td>
+                            <ul>
+                                <li>32 x 32G FC to Database Servers</li>
+                                <li>16 x 32G FC to Storage Arrays</li>
+                                <li>2 x 1G Management</li>
+                            </ul>
+                        </td>
+                    </tr>
+                </table>
+
+                <h4>Storage Arrays</h4>
+                <table>
+                    <tr>
+                        <th>Component</th>
+                        <th>Model</th>
+                        <th>Quantity</th>
+                        <th>Specifications</th>
+                        <th>Connectivity</th>
+                    </tr>
+                    <tr>
+                        <td>All-Flash Storage Array</td>
+                        <td>Pure Storage FlashArray//X70</td>
+                        <td>2</td>
+                        <td>
+                            <ul>
+                                <li>1.3PB Effective Capacity</li>
+                                <li>Redundant Controllers</li>
+                                <li>Redundant Power Supplies</li>
+                                <li>Inline Deduplication and Compression</li>
+                            </ul>
+                        </td>
+                        <td>
+                            <ul>
+                                <li>8 x 32G FC to SAN Switches</li>
+                                <li>2 x 1G Management</li>
+                            </ul>
+                        </td>
+                    </tr>
+                </table>
+            </div>
+        </div>
+
+        <div id="physical-tertiary" class="tab-content">
+            <h3>Tertiary Control Hub Physical Architecture</h3>
+            
+            <div class="diagram-container">
+                <div class="diagram" id="physical-tertiary-diagram">
+                    <!-- Physical Tertiary diagram will be rendered by JavaScript -->
+                </div>
+            </div>
+            
+            <button class="collapsible">Core Network Zone</button>
+            <div class="collapsible-content">
+                <h4>Core Switches</h4>
+                <table>
+                    <tr>
+                        <th>Component</th>
+                        <th>Model</th>
+                        <th>Quantity</th>
+                        <th>Specifications</th>
+                        <th>Connectivity</th>
+                    </tr>
+                    <tr>
+                        <td>Core Switch</td>
+                        <td>Cisco Nexus 9516</td>
+                        <td>2</td>
+                        <td>
+                            <ul>
+                                <li>Supervisor B modules</li>
+                                <li>Fabric modules</li>
+                                <li>36 x 100G Line Cards</li>
+                                <li>VPC Configuration</li>
+                            </ul>
+                        </td>
+                        <td>
+                            <ul>
+                                <li>8 x 100G to ACI Spine Switches</li>
+                                <li>8 x 100G to WAN Routers</li>
+                                <li>2 x 1G Management</li>
+                            </ul>
+                        </td>
+                    </tr>
+                </table>
+
+                <h4>Core Firewalls</h4>
+                <table>
+                    <tr>
+                        <th>Component</th>
+                        <th>Model</th>
+                        <th>Quantity</th>
+                        <th>Specifications</th>
+                        <th>Connectivity</th>
+                    </tr>
+                    <tr>
+                        <td>Core Firewall</td>
+                        <td>Cisco Firepower 4120</td>
+                        <td>2</td>
+                        <td>
+                            <ul>
+                                <li>20 Gbps Firewall Throughput</li>
+                                <li>10 Gbps IPS Throughput</li>
+                                <li>Redundant Power Supplies</li>
+                                <li>Active/Standby Configuration</li>
+                            </ul>
+                        </td>
+                        <td>
+                            <ul>
+                                <li>4 x 10G to ACI Leaf Switches</li>
+                                <li>2 x 1G Management</li>
+                            </ul>
+                        </td>
+                    </tr>
+                </table>
+            </div>
+            
+            <button class="collapsible">ACI Fabric</button>
+            <div class="collapsible-content">
+                <h4>Spine Switches</h4>
+                <table>
+                    <tr>
+                        <th>Component</th>
+                        <th>Model</th>
+                        <th>Quantity</th>
+                        <th>Specifications</th>
+                        <th>Connectivity</th>
+                    </tr>
+                    <tr>
+                        <td>ACI Spine Switch</td>
+                        <td>Cisco Nexus 9364C</td>
+                        <td>2</td>
+                        <td>
+                            <ul>
+                                <li>64 x 100G Ports</li>
+                                <li>Redundant Power Supplies</li>
+                                <li>Redundant Fans</li>
+                                <li>ACI Spine Mode</li>
+                            </ul>
+                        </td>
+                        <td>
+                            <ul>
+                                <li>8 x 100G to Core Switches</li>
+                                <li>24 x 100G to Leaf Switches</li>
+                                <li>2 x 1G Management</li>
+                            </ul>
+                        </td>
+                    </tr>
+                </table>
+
+                <h4>Leaf Switches</h4>
+                <table>
+                    <tr>
+                        <th>Component</th>
+                        <th>Model</th>
+                        <th>Quantity</th>
+                        <th>Specifications</th>
+                        <th>Connectivity</th>
+                    </tr>
+                    <tr>
+                        <td>ACI Leaf Switch</td>
+                        <td>Cisco Nexus 93180YC-FX</td>
+                        <td>12</td>
+                        <td>
+                            <ul>
+                                <li>48 x 10/25G SFP+ Ports</li>
+                                <li>6 x 40/100G QSFP+ Ports</li>
+                                <li>Redundant Power Supplies</li>
+                                <li>Redundant Fans</li>
+                                <li>ACI Leaf Mode</li>
+                            </ul>
+                        </td>
+                        <td>
+                            <ul>
+                                <li>4 x 100G to Spine Switches</li>
+                                <li>48 x 10/25G to Servers</li>
+                                <li>2 x 1G Management</li>
+                            </ul>
+                        </td>
+                    </tr>
+                </table>
+
+                <h4>APIC Controllers</h4>
+                <table>
+                    <tr>
+                        <th>Component</th>
+                        <th>Model</th>
+                        <th>Quantity</th>
+                        <th>Specifications</th>
+                        <th>Connectivity</th>
+                    </tr>
+                    <tr>
+                        <td>APIC Controller</td>
+                        <td>Cisco APIC M3</td>
+                        <td>3</td>
+                        <td>
+                            <ul>
+                                <li>2 x Intel Xeon CPU</li>
+                                <li>128GB RAM</li>
+                                <li>2 x 960GB SSD</li>
+                                <li>Redundant Power Supplies</li>
+                            </ul>
+                        </td>
+                        <td>
+                            <ul>
+                                <li>2 x 10G to ACI Leaf Switches</li>
+                                <li>2 x 1G Management</li>
+                            </ul>
+                        </td>
+                    </tr>
+                </table>
+            </div>
+            
+            <button class="collapsible">Management Zone</button>
+            <div class="collapsible-content">
+                <h4>ACI Multi-Site Orchestrator</h4>
+                <table>
+                    <tr>
+                        <th>Component</th>
+                        <th>Model</th>
+                        <th>Quantity</th>
+                        <th>Specifications</th>
+                        <th>Connectivity</th>
+                    </tr>
+                    <tr>
+                        <td>MSO Cluster</td>
+                        <td>Cisco MSO Virtual Appliance</td>
+                        <td>3</td>
+                        <td>
+                            <ul>
+                                <li>8 vCPU</li>
+                                <li>32GB RAM</li>
+                                <li>500GB Storage</li>
+                                <li>High Availability Cluster</li>
+                            </ul>
+                        </td>
+                        <td>
+                            <ul>
+                                <li>10G Network to Management Network</li>
+                                <li>Connectivity to all APIC clusters</li>
+                            </ul>
+                        </td>
+                    </tr>
+                </table>
+
+                <h4>Network Management Systems</h4>
+                <table>
+                    <tr>
+                        <th>Component</th>
+                        <th>Model</th>
+                        <th>Quantity</th>
+                        <th>Specifications</th>
+                        <th>Connectivity</th>
+                    </tr>
+                    <tr>
+                        <td>Cisco DNA Center</td>
+                        <td>Cisco DNA Center Appliance</td>
+                        <td>3</td>
+                        <td>
+                            <ul>
+                                <li>44 Cores</li>
+                                <li>384GB RAM</li>
+                                <li>2.4TB SSD</li>
+                                <li>Cluster Configuration</li>
+                            </ul>
+                        </td>
+                        <td>
+                            <ul>
+                                <li>2 x 10G to Management Network</li>
+                                <li>2 x 1G Management</li>
+                            </ul>
+                        </td>
+                    </tr>
+                </table>
+
+                <h4>Security Operations Center</h4>
+                <table>
+                    <tr>
+                        <th>Component</th>
+                        <th>Model</th>
+                        <th>Quantity</th>
+                        <th>Specifications</th>
+                        <th>Connectivity</th>
+                    </tr>
+                    <tr>
+                        <td>SIEM Platform</td>
+                        <td>Splunk Enterprise Security</td>
+                        <td>3</td>
+                        <td>
+                            <ul>
+                                <li>24 Cores</li>
+                                <li>256GB RAM</li>
+                                <li>10TB Storage</li>
+                                <li>Cluster Configuration</li>
+                            </ul>
+                        </td>
+                        <td>
+                            <ul>
+                                <li>2 x 10G to Management Network</li>
+                                <li>2 x 1G Management</li>
+                            </ul>
+                        </td>
+                    </tr>
+                </table>
+            </div>
+        </div>
+
+        <div id="physical-interconnect" class="tab-content">
+            <h3>Datacenter Interconnectivity</h3>
+            
+            <div class="diagram-container">
+                <div class="diagram" id="physical-interconnect-diagram">
+                    <!-- Physical Interconnect diagram will be rendered by JavaScript -->
+                </div>
+            </div>
+            
+            <button class="collapsible">WAN Routers</button>
+            <div class="collapsible-content">
+                <h4>Inter-DC WAN Routers</h4>
+                <table>
+                    <tr>
+                        <th>Component</th>
+                        <th>Model</th>
+                        <th>Quantity</th>
+                        <th>Specifications</th>
+                        <th>Connectivity</th>
+                    </tr>
+                    <tr>
+                        <td>WAN Router</td>
+                        <td>Cisco ASR 1009-X</td>
+                        <td>2 per DC</td>
+                        <td>
+                            <ul>
+                                <li>Redundant Route Processors</li>
+                                <li>Redundant Power Supplies</li>
+                                <li>100G Throughput</li>
+                                <li>IPsec VPN Support</li>
+                            </ul>
+                        </td>
+                        <td>
+                            <ul>
+                                <li>4 x 100G to Core Switches</li>
+                                <li>2 x 100G to Dark Fiber</li>
+                                <li>2 x 10G to MPLS Provider</li>
+                                <li>2 x 1G Management</li>
+                            </ul>
+                        </td>
+                    </tr>
+                </table>
+            </div>
+            
+            <button class="collapsible">Inter-DC Links</button>
+            <div class="collapsible-content">
+                <h4>Primary Connectivity: Dark Fiber</h4>
+                <table>
+                    <tr>
+                        <th>Link</th>
+                        <th>Capacity</th>
+                        <th>Distance</th>
+                        <th>Latency</th>
+                        <th>Redundancy</th>
+                    </tr>
+                    <tr>
+                        <td>North DC to South DC</td>
+                        <td>2 x 100G</td>
+                        <td>50 km</td>
+                        <td>&lt; 1 ms</td>
+                        <td>Diverse Path Routing</td>
+                    </tr>
+                    <tr>
+                        <td>North DC to Tertiary DC</td>
+                        <td>2 x 100G</td>
+                        <td>30 km</td>
+                        <td>&lt; 0.5 ms</td>
+                        <td>Diverse Path Routing</td>
+                    </tr>
+                    <tr>
+                        <td>South DC to Tertiary DC</td>
+                        <td>2 x 100G</td>
+                        <td>40 km</td>
+                        <td>&lt; 0.8 ms</td>
+                        <td>Diverse Path Routing</td>
+                    </tr>
+                </table>
+                
+                <h4>Backup Connectivity: MPLS</h4>
+                <table>
+                    <tr>
+                        <th>Link</th>
+                        <th>Capacity</th>
+                        <th>Provider</th>
+                        <th>SLA</th>
+                        <th>QoS</th>
+                    </tr>
+                    <tr>
+                        <td>North DC to South DC</td>
+                        <td>2 x 10G</td>
+                        <td>Primary MPLS Provider</td>
+                        <td>99.99% Availability, &lt; 10ms Latency</td>
+                        <td>Voice, Video, Data Classes</td>
+                    </tr>
+                    <tr>
+                        <td>North DC to Tertiary DC</td>
+                        <td>2 x 10G</td>
+                        <td>Primary MPLS Provider</td>
+                        <td>99.99% Availability, &lt; 10ms Latency</td>
+                        <td>Voice, Video, Data Classes</td>
+                    </tr>
+                    <tr>
+                        <td>South DC to Tertiary DC</td>
+                        <td>2 x 10G</td>
+                        <td>Primary MPLS Provider</td>
+                        <td>99.99% Availability, &lt; 10ms Latency</td>
+                        <td>Voice, Video, Data Classes</td>
+                    </tr>
+                </table>
+                
+                <h4>Tertiary Connectivity: SD-WAN</h4>
+                <table>
+                    <tr>
+                        <th>Link</th>
+                        <th>Capacity</th>
+                        <th>Transport</th>
+                        <th>Features</th>
+                        <th>Security</th>
+                    </tr>
+                    <tr>
+                        <td>All DCs</td>
+                        <td>Variable</td>
+                        <td>Internet, MPLS, 4G/5G</td>
+                        <td>Dynamic Path Selection, Application-Aware Routing</td>
+                        <td>IPsec Encryption, Zero Trust</td>
+                    </tr>
+                </table>
+            </div>
+        </div>
+    </div>
+</section>
