@@ -1,0 +1,256 @@
+<section id="security-architecture">
+    <h2>Security Architecture</h2>
+    
+    <div class="tab-container">
+        <div class="tab-buttons">
+            <button class="tab-button active" data-tab="security-zones">Security Zones</button>
+            <button class="tab-button" data-tab="security-controls">Security Controls</button>
+            <button class="tab-button" data-tab="security-policies">Security Policies</button>
+        </div>
+
+        <div id="security-zones" class="tab-content active">
+            <h3>Security Zones</h3>
+            
+            <p>The security architecture is based on a defense-in-depth approach with clearly defined security zones and boundaries. Each zone has specific security controls and policies.</p>
+            
+            <div class="diagram-container">
+                <div class="diagram" id="security-zones-diagram">
+                    <!-- Security Zones diagram will be rendered by JavaScript -->
+                </div>
+            </div>
+            
+            <h4>Zone Definitions</h4>
+            <table>
+                <tr>
+                    <th>Zone</th>
+                    <th>Description</th>
+                    <th>Trust Level</th>
+                    <th>Key Components</th>
+                </tr>
+                <tr>
+                    <td>Internet Edge</td>
+                    <td>Provides connectivity to the internet</td>
+                    <td>Untrusted</td>
+                    <td>Border Routers, DDoS Protection</td>
+                </tr>
+                <tr>
+                    <td>DMZ</td>
+                    <td>Hosts public-facing services</td>
+                    <td>Semi-Trusted</td>
+                    <td>Web Servers, Reverse Proxies, WAF</td>
+                </tr>
+                <tr>
+                    <td>Application Zone</td>
+                    <td>Hosts application services</td>
+                    <td>Trusted</td>
+                    <td>Application Servers, Middleware</td>
+                </tr>
+                <tr>
+                    <td>Database Zone</td>
+                    <td>Hosts database services</td>
+                    <td>Highly Trusted</td>
+                    <td>Database Servers, Data Warehouses</td>
+                </tr>
+                <tr>
+                    <td>Management Zone</td>
+                    <td>Hosts management services</td>
+                    <td>Restricted</td>
+                    <td>Management Servers, Monitoring Systems</td>
+                </tr>
+                <tr>
+                    <td>Storage Zone</td>
+                    <td>Hosts storage services</td>
+                    <td>Highly Trusted</td>
+                    <td>Storage Arrays, SAN Switches</td>
+                </tr>
+            </table>
+        </div>
+
+        <div id="security-controls" class="tab-content">
+            <h3>Security Controls</h3>
+            
+            <p>Each security zone boundary is protected by specific security controls. These controls enforce the security policies and provide defense-in-depth protection.</p>
+            
+            <h4>Zone Boundary Controls</h4>
+            <table>
+                <tr>
+                    <th>Boundary</th>
+                    <th>Primary Control</th>
+                    <th>Secondary Controls</th>
+                    <th>Inspection Types</th>
+                </tr>
+                <tr>
+                    <td>Internet to Internet Edge</td>
+                    <td>DDoS Protection</td>
+                    <td>IP Reputation Filtering, Rate Limiting</td>
+                    <td>Volumetric, Protocol Anomaly</td>
+                </tr>
+                <tr>
+                    <td>Internet Edge to DMZ</td>
+                    <td>Next-Generation Firewall</td>
+                    <td>Web Application Firewall, IPS</td>
+                    <td>Stateful, Application-Aware, Signature-Based</td>
+                </tr>
+                <tr>
+                    <td>DMZ to Application Zone</td>
+                    <td>Next-Generation Firewall</td>
+                    <td>IPS, Application Filtering</td>
+                    <td>Stateful, Application-Aware, User-Based</td>
+                </tr>
+                <tr>
+                    <td>Application to Database Zone</td>
+                    <td>Database Firewall</td>
+                    <td>Data Loss Prevention, Query Analysis</td>
+                    <td>SQL Injection, Anomaly Detection</td>
+                </tr>
+                <tr>
+                    <td>Any Zone to Management Zone</td>
+                    <td>Management Firewall</td>
+                    <td>Jump Servers, MFA</td>
+                    <td>Stateful, User-Based, Session Recording</td>
+                </tr>
+            </table>
+            
+            <h4>Inter-Datacenter Security</h4>
+            <table>
+                <tr>
+                    <th>Connection</th>
+                    <th>Encryption</th>
+                    <th>Authentication</th>
+                    <th>Additional Controls</th>
+                </tr>
+                <tr>
+                    <td>North DC to South DC</td>
+                    <td>MACsec (Layer 2), IPsec (Layer 3)</td>
+                    <td>Pre-shared Keys, Certificate-Based</td>
+                    <td>Traffic Filtering, QoS</td>
+                </tr>
+                <tr>
+                    <td>North DC to Tertiary DC</td>
+                    <td>MACsec (Layer 2), IPsec (Layer 3)</td>
+                    <td>Pre-shared Keys, Certificate-Based</td>
+                    <td>Traffic Filtering, QoS</td>
+                </tr>
+                <tr>
+                    <td>South DC to Tertiary DC</td>
+                    <td>MACsec (Layer 2), IPsec (Layer 3)</td>
+                    <td>Pre-shared Keys, Certificate-Based</td>
+                    <td>Traffic Filtering, QoS</td>
+                </tr>
+            </table>
+        </div>
+
+        <div id="security-policies" class="tab-content">
+            <h3>Security Policies</h3>
+            
+            <p>Security policies define the rules for communication between zones and the controls applied to different types of traffic.</p>
+            
+            <h4>Default Zone Policies</h4>
+            <table>
+                <tr>
+                    <th>Source Zone</th>
+                    <th>Destination Zone</th>
+                    <th>Default Policy</th>
+                    <th>Exceptions</th>
+                </tr>
+                <tr>
+                    <td>Internet</td>
+                    <td>Internet Edge</td>
+                    <td>Allow with Filtering</td>
+                    <td>Block Known Bad Sources</td>
+                </tr>
+                <tr>
+                    <td>Internet Edge</td>
+                    <td>DMZ</td>
+                    <td>Allow Specific Services</td>
+                    <td>HTTP, HTTPS, DNS</td>
+                </tr>
+                <tr>
+                    <td>DMZ</td>
+                    <td>Application Zone</td>
+                    <td>Allow Specific Services</td>
+                    <td>Application-Specific Protocols</td>
+                </tr>
+                <tr>
+                    <td>Application Zone</td>
+                    <td>Database Zone</td>
+                    <td>Allow Specific Services</td>
+                    <td>Database Protocols</td>
+                </tr>
+                <tr>
+                    <td>Any Zone</td>
+                    <td>Management Zone</td>
+                    <td>Deny All</td>
+                    <td>Authorized Management Traffic</td>
+                </tr>
+                <tr>
+                    <td>Management Zone</td>
+                    <td>Any Zone</td>
+                    <td>Allow Management</td>
+                    <td>Based on Role</td>
+                </tr>
+            </table>
+            
+            <h4>Micro-Segmentation Policies</h4>
+            <p>Within each zone, micro-segmentation is implemented using ACI contracts to provide granular security controls between workloads.</p>
+            
+            <div class="tree-view">
+                <div class="tree-item">
+                    <span class="tree-toggle">Application Zone Micro-Segmentation</span>
+                    <div class="tree-content">
+                        <div class="tree-item">
+                            <span class="tree-toggle">Web Tier</span>
+                            <div class="tree-content">
+                                <div>Web Servers → App Servers: HTTP/HTTPS</div>
+                                <div>Web Servers → Web Servers: None</div>
+                                <div>Management → Web Servers: SSH, HTTPS</div>
+                            </div>
+                        </div>
+                        <div class="tree-item">
+                            <span class="tree-toggle">App Tier</span>
+                            <div class="tree-content">
+                                <div>App Servers → Database: SQL, Oracle</div>
+                                <div>App Servers → App Servers: RPC</div>
+                                <div>Management → App Servers: SSH, HTTPS</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <h4>Authentication and Authorization</h4>
+            <table>
+                <tr>
+                    <th>Access Type</th>
+                    <th>Authentication Method</th>
+                    <th>Authorization Model</th>
+                    <th>Implementation</th>
+                </tr>
+                <tr>
+                    <td>User Access</td>
+                    <td>Multi-Factor Authentication</td>
+                    <td>Role-Based Access Control</td>
+                    <td>Cisco ISE, Active Directory</td>
+                </tr>
+                <tr>
+                    <td>Administrative Access</td>
+                    <td>Multi-Factor Authentication</td>
+                    <td>Privileged Access Management</td>
+                    <td>CyberArk, Cisco ISE</td>
+                </tr>
+                <tr>
+                    <td>Application Access</td>
+                    <td>Certificate-Based</td>
+                    <td>Service-Based Access Control</td>
+                    <td>ACI Contracts, Service Mesh</td>
+                </tr>
+                <tr>
+                    <td>API Access</td>
+                    <td>OAuth 2.0, API Keys</td>
+                    <td>Scope-Based Access Control</td>
+                    <td>API Gateway, Identity Provider</td>
+                </tr>
+            </table>
+        </div>
+    </div>
+</section>

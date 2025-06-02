@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Network Architecture - Option 2: Distributed Control with Centralized Management</title>
+    <link rel="stylesheet" href="network_architecture.css">
+</head>
+<body>
+    <header>
+        <h1>Network Architecture - Option 2</h1>
+        <p>Distributed Control with Centralized Management</p>
+    </header>
+
+    <nav>
+        <ul>
+            <li><a href="#overview" class="active">Overview</a></li>
+            <li><a href="#physical-architecture">Physical Architecture</a></li>
+            <li><a href="#logical-architecture">Logical Architecture</a></li>
+            <li><a href="#aci-implementation">ACI Implementation</a></li>
+            <li><a href="#security-architecture">Security Architecture</a></li>
+            <li><a href="#connectivity">Connectivity</a></li>
+            <li><a href="#traffic-flows">Traffic Flows</a></li>
+            <li><a href="#user-access">User Access</a></li>
+            <li><a href="#high-availability">High Availability</a></li>
+            <li><a href="#implementation">Implementation</a></li>
+        </ul>
+    </nav>
+
+    <main>
+        <div class="search-container">
+            <input type="text" id="search-input" class="search-input" placeholder="Search the architecture documentation...">
+        </div>
+
+        <section id="overview">
+            <h2>Architecture Overview</h2>
+            <p>This detailed low-level design document outlines the network architecture for a three-datacenter deployment with Distributed Control and Centralized Management. The architecture consists of two active-active datacenters (North and South) with direct internet connectivity and a tertiary datacenter serving as a control hub without direct internet access.</p>
+
+            <div class="diagram-container">
+                <div class="diagram" id="overview-diagram">
+                    <!-- Overview diagram will be rendered by JavaScript -->
+                </div>
+            </div>
+
+            <div class="card">
+                <div class="card-header">
+                    <h3 class="card-title">Key Architecture Principles</h3>
+                </div>
+                <ul>
+                    <li><strong>Distributed Control:</strong> Each datacenter maintains its own control plane for local operations</li>
+                    <li><strong>Centralized Management:</strong> Unified management and orchestration from the Tertiary Control Hub</li>
+                    <li><strong>Autonomous Operation:</strong> Each datacenter can operate independently if isolated</li>
+                    <li><strong>Consistent Policy:</strong> Standardized policy model across all three datacenters</li>
+                    <li><strong>Defense in Depth:</strong> Multiple security layers with clear zone separation</li>
+                    <li><strong>Resilient Connectivity:</strong> Redundant paths between all datacenters</li>
+                </ul>
+            </div>
+
+            <div class="tab-container">
+                <div class="tab-buttons">
+                    <button class="tab-button active" data-tab="north-dc">North Datacenter</button>
+                    <button class="tab-button" data-tab="south-dc">South Datacenter</button>
+                    <button class="tab-button" data-tab="tertiary-dc">Tertiary Control Hub</button>
+                </div>
+
+                <div id="north-dc" class="tab-content active">
+                    <h3>North Datacenter Overview</h3>
+                    <p>The North Datacenter serves as one of the two active sites in the active-active DC-DR configuration. It provides direct internet connectivity and hosts production workloads.</p>
+                    
+                    <h4>Key Components:</h4>
+                    <ul>
+                        <li>Internet Edge Infrastructure</li>
+                        <li>DMZ Zone</li>
+                        <li>ACI Fabric</li>
+                        <li>Compute and Storage Resources</li>
+                        <li>Local Management Systems</li>
+                    </ul>
+                </div>
+
+                <div id="south-dc" class="tab-content">
+                    <h3>South Datacenter Overview</h3>
+                    <p>The South Datacenter serves as the second active site in the active-active DC-DR configuration. Like the North Datacenter, it provides direct internet connectivity and hosts production workloads.</p>
+                    
+                    <h4>Key Components:</h4>
+                    <ul>
+                        <li>Internet Edge Infrastructure</li>
+                        <li>DMZ Zone</li>
+                        <li>ACI Fabric</li>
+                        <li>Compute and Storage Resources</li>
+                        <li>Local Management Systems</li>
+                    </ul>
+                </div>
+
+                <div id="tertiary-dc" class="tab-content">
+                    <h3>Tertiary Control Hub Overview</h3>
+                    <p>The Tertiary Control Hub serves as the centralized management and orchestration center for the entire infrastructure. It does not have direct internet connectivity and focuses on management, security, and control functions.</p>
+                    
+                    <h4>Key Components:</h4>
+                    <ul>
+                        <li>ACI Multi-Site Orchestrator</li>
+                        <li>Network Management Systems</li>
+                        <li>Security Operations Center</li>
+                        <li>Automation and Orchestration Platforms</li>
+                        <li>Backup and Recovery Infrastructure</li>
+                    </ul>
+                </div>
+            </div>
+        </section>
+
+        <!-- Other sections will be loaded dynamically -->
+        <div id="dynamic-content"></div>
+    </main>
+
+    <div class="back-to-top">↑</div>
+
+    <footer>
+        <p>Network Architecture Design - Distributed Control with Centralized Management</p>
+    </footer>
+
+    <script src="network_architecture.js"></script>
+</body>
+</html>

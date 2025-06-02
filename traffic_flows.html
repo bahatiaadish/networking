@@ -1,0 +1,496 @@
+<section id="traffic-flows">
+    <h2>Traffic Flows</h2>
+    
+    <div class="tab-container">
+        <div class="tab-buttons">
+            <button class="tab-button active" data-tab="traffic-overview">Overview</button>
+            <button class="tab-button" data-tab="traffic-north-south">North-South Traffic</button>
+            <button class="tab-button" data-tab="traffic-east-west">East-West Traffic</button>
+            <button class="tab-button" data-tab="traffic-user-access">User Access Patterns</button>
+        </div>
+
+        <div id="traffic-overview" class="tab-content active">
+            <h3>Traffic Flow Overview</h3>
+            
+            <p>The traffic flow architecture is designed to optimize performance, security, and reliability across the three-datacenter deployment. Traffic is categorized into North-South (external) and East-West (internal) flows, with specific patterns for different user access types.</p>
+            
+            <div class="diagram-container">
+                <div class="diagram" id="traffic-overview-diagram">
+                    <!-- Traffic Overview diagram will be rendered by JavaScript -->
+                </div>
+            </div>
+            
+            <h4>Traffic Categories</h4>
+            <table>
+                <tr>
+                    <th>Category</th>
+                    <th>Description</th>
+                    <th>Key Characteristics</th>
+                    <th>Optimization Strategy</th>
+                </tr>
+                <tr>
+                    <td>North-South (Internet)</td>
+                    <td>Traffic between the internet and the datacenters</td>
+                    <td>High Volume, Variable, Potentially Malicious</td>
+                    <td>Load Balancing, DDoS Protection, WAF</td>
+                </tr>
+                <tr>
+                    <td>North-South (Enterprise)</td>
+                    <td>Traffic between enterprise networks and the datacenters</td>
+                    <td>Predictable, Business-Critical, Sensitive</td>
+                    <td>QoS, Encryption, Redundant Paths</td>
+                </tr>
+                <tr>
+                    <td>East-West (Inter-DC)</td>
+                    <td>Traffic between the three datacenters</td>
+                    <td>High Volume, Latency-Sensitive, Critical</td>
+                    <td>Direct Paths, Low Latency, Redundancy</td>
+                </tr>
+                <tr>
+                    <td>East-West (Intra-DC)</td>
+                    <td>Traffic within each datacenter</td>
+                    <td>Very High Volume, Latency-Sensitive</td>
+                    <td>Micro-Segmentation, ACI Optimization</td>
+                </tr>
+                <tr>
+                    <td>Management</td>
+                    <td>Traffic for managing the infrastructure</td>
+                    <td>Low Volume, Highly Sensitive</td>
+                    <td>Isolation, Encryption, Access Control</td>
+                </tr>
+            </table>
+        </div>
+
+        <div id="traffic-north-south" class="tab-content">
+            <h3>North-South Traffic</h3>
+            
+            <p>North-South traffic flows between external networks (internet, enterprise) and the datacenters. This traffic is processed through multiple security layers before reaching internal resources.</p>
+            
+            <div class="diagram-container">
+                <div class="diagram" id="traffic-north-south-diagram">
+                    <!-- North-South Traffic diagram will be rendered by JavaScript -->
+                </div>
+            </div>
+            
+            <h4>Internet Ingress Flow</h4>
+            <div class="flow-diagram">
+                <div class="flow-step">
+                    <div class="flow-icon internet"></div>
+                    <div class="flow-label">Internet</div>
+                </div>
+                <div class="flow-arrow">→</div>
+                <div class="flow-step">
+                    <div class="flow-icon router"></div>
+                    <div class="flow-label">Border Router</div>
+                </div>
+                <div class="flow-arrow">→</div>
+                <div class="flow-step">
+                    <div class="flow-icon ddos"></div>
+                    <div class="flow-label">DDoS Protection</div>
+                </div>
+                <div class="flow-arrow">→</div>
+                <div class="flow-step">
+                    <div class="flow-icon loadbalancer"></div>
+                    <div class="flow-label">External Load Balancer</div>
+                </div>
+                <div class="flow-arrow">→</div>
+                <div class="flow-step">
+                    <div class="flow-icon firewall"></div>
+                    <div class="flow-label">DMZ Firewall</div>
+                </div>
+                <div class="flow-arrow">→</div>
+                <div class="flow-step">
+                    <div class="flow-icon waf"></div>
+                    <div class="flow-label">Web Application Firewall</div>
+                </div>
+                <div class="flow-arrow">→</div>
+                <div class="flow-step">
+                    <div class="flow-icon server"></div>
+                    <div class="flow-label">DMZ Web Server</div>
+                </div>
+            </div>
+            
+            <h4>Internet Egress Flow</h4>
+            <div class="flow-diagram">
+                <div class="flow-step">
+                    <div class="flow-icon server"></div>
+                    <div class="flow-label">Internal Server</div>
+                </div>
+                <div class="flow-arrow">→</div>
+                <div class="flow-step">
+                    <div class="flow-icon firewall"></div>
+                    <div class="flow-label">Core Firewall</div>
+                </div>
+                <div class="flow-arrow">→</div>
+                <div class="flow-step">
+                    <div class="flow-icon firewall"></div>
+                    <div class="flow-label">DMZ Firewall</div>
+                </div>
+                <div class="flow-arrow">→</div>
+                <div class="flow-step">
+                    <div class="flow-icon router"></div>
+                    <div class="flow-label">Border Router</div>
+                </div>
+                <div class="flow-arrow">→</div>
+                <div class="flow-step">
+                    <div class="flow-icon internet"></div>
+                    <div class="flow-label">Internet</div>
+                </div>
+            </div>
+            
+            <h4>Enterprise Access Flow</h4>
+            <div class="flow-diagram">
+                <div class="flow-step">
+                    <div class="flow-icon enterprise"></div>
+                    <div class="flow-label">Enterprise Network</div>
+                </div>
+                <div class="flow-arrow">→</div>
+                <div class="flow-step">
+                    <div class="flow-icon mpls"></div>
+                    <div class="flow-label">MPLS/SD-WAN</div>
+                </div>
+                <div class="flow-arrow">→</div>
+                <div class="flow-step">
+                    <div class="flow-icon router"></div>
+                    <div class="flow-label">WAN Router</div>
+                </div>
+                <div class="flow-arrow">→</div>
+                <div class="flow-step">
+                    <div class="flow-icon firewall"></div>
+                    <div class="flow-label">Core Firewall</div>
+                </div>
+                <div class="flow-arrow">→</div>
+                <div class="flow-step">
+                    <div class="flow-icon loadbalancer"></div>
+                    <div class="flow-label">Internal Load Balancer</div>
+                </div>
+                <div class="flow-arrow">→</div>
+                <div class="flow-step">
+                    <div class="flow-icon server"></div>
+                    <div class="flow-label">Application Server</div>
+                </div>
+            </div>
+        </div>
+
+        <div id="traffic-east-west" class="tab-content">
+            <h3>East-West Traffic</h3>
+            
+            <p>East-West traffic flows between and within datacenters. This includes application communication, data replication, and management traffic.</p>
+            
+            <div class="diagram-container">
+                <div class="diagram" id="traffic-east-west-diagram">
+                    <!-- East-West Traffic diagram will be rendered by JavaScript -->
+                </div>
+            </div>
+            
+            <h4>Inter-Datacenter Application Flow</h4>
+            <div class="flow-diagram">
+                <div class="flow-step">
+                    <div class="flow-icon server"></div>
+                    <div class="flow-label">App Server (North DC)</div>
+                </div>
+                <div class="flow-arrow">→</div>
+                <div class="flow-step">
+                    <div class="flow-icon switch"></div>
+                    <div class="flow-label">ACI Leaf Switch</div>
+                </div>
+                <div class="flow-arrow">→</div>
+                <div class="flow-step">
+                    <div class="flow-icon switch"></div>
+                    <div class="flow-label">ACI Spine Switch</div>
+                </div>
+                <div class="flow-arrow">→</div>
+                <div class="flow-step">
+                    <div class="flow-icon router"></div>
+                    <div class="flow-label">WAN Router</div>
+                </div>
+                <div class="flow-arrow">→</div>
+                <div class="flow-step">
+                    <div class="flow-icon darkfiber"></div>
+                    <div class="flow-label">Dark Fiber</div>
+                </div>
+                <div class="flow-arrow">→</div>
+                <div class="flow-step">
+                    <div class="flow-icon router"></div>
+                    <div class="flow-label">WAN Router (South DC)</div>
+                </div>
+                <div class="flow-arrow">→</div>
+                <div class="flow-step">
+                    <div class="flow-icon switch"></div>
+                    <div class="flow-label">ACI Spine Switch</div>
+                </div>
+                <div class="flow-arrow">→</div>
+                <div class="flow-step">
+                    <div class="flow-icon switch"></div>
+                    <div class="flow-label">ACI Leaf Switch</div>
+                </div>
+                <div class="flow-arrow">→</div>
+                <div class="flow-step">
+                    <div class="flow-icon server"></div>
+                    <div class="flow-label">App Server (South DC)</div>
+                </div>
+            </div>
+            
+            <h4>Database Replication Flow</h4>
+            <div class="flow-diagram">
+                <div class="flow-step">
+                    <div class="flow-icon database"></div>
+                    <div class="flow-label">Database (North DC)</div>
+                </div>
+                <div class="flow-arrow">→</div>
+                <div class="flow-step">
+                    <div class="flow-icon switch"></div>
+                    <div class="flow-label">ACI Leaf Switch</div>
+                </div>
+                <div class="flow-arrow">→</div>
+                <div class="flow-step">
+                    <div class="flow-icon switch"></div>
+                    <div class="flow-label">ACI Spine Switch</div>
+                </div>
+                <div class="flow-arrow">→</div>
+                <div class="flow-step">
+                    <div class="flow-icon router"></div>
+                    <div class="flow-label">WAN Router</div>
+                </div>
+                <div class="flow-arrow">→</div>
+                <div class="flow-step">
+                    <div class="flow-icon darkfiber"></div>
+                    <div class="flow-label">Dedicated Replication Link</div>
+                </div>
+                <div class="flow-arrow">→</div>
+                <div class="flow-step">
+                    <div class="flow-icon router"></div>
+                    <div class="flow-label">WAN Router (South DC)</div>
+                </div>
+                <div class="flow-arrow">→</div>
+                <div class="flow-step">
+                    <div class="flow-icon switch"></div>
+                    <div class="flow-label">ACI Spine Switch</div>
+                </div>
+                <div class="flow-arrow">→</div>
+                <div class="flow-step">
+                    <div class="flow-icon switch"></div>
+                    <div class="flow-label">ACI Leaf Switch</div>
+                </div>
+                <div class="flow-arrow">→</div>
+                <div class="flow-step">
+                    <div class="flow-icon database"></div>
+                    <div class="flow-label">Database (South DC)</div>
+                </div>
+            </div>
+            
+            <h4>Management Traffic Flow</h4>
+            <div class="flow-diagram">
+                <div class="flow-step">
+                    <div class="flow-icon management"></div>
+                    <div class="flow-label">Management System (Tertiary DC)</div>
+                </div>
+                <div class="flow-arrow">→</div>
+                <div class="flow-step">
+                    <div class="flow-icon switch"></div>
+                    <div class="flow-label">Management Switch</div>
+                </div>
+                <div class="flow-arrow">→</div>
+                <div class="flow-step">
+                    <div class="flow-icon firewall"></div>
+                    <div class="flow-label">Management Firewall</div>
+                </div>
+                <div class="flow-arrow">→</div>
+                <div class="flow-step">
+                    <div class="flow-icon router"></div>
+                    <div class="flow-label">WAN Router</div>
+                </div>
+                <div class="flow-arrow">→</div>
+                <div class="flow-step">
+                    <div class="flow-icon darkfiber"></div>
+                    <div class="flow-label">Out-of-Band Management Network</div>
+                </div>
+                <div class="flow-arrow">→</div>
+                <div class="flow-step">
+                    <div class="flow-icon router"></div>
+                    <div class="flow-label">WAN Router (North/South DC)</div>
+                </div>
+                <div class="flow-arrow">→</div>
+                <div class="flow-step">
+                    <div class="flow-icon switch"></div>
+                    <div class="flow-label">Management Switch</div>
+                </div>
+                <div class="flow-arrow">→</div>
+                <div class="flow-step">
+                    <div class="flow-icon server"></div>
+                    <div class="flow-label">Managed Device</div>
+                </div>
+            </div>
+        </div>
+
+        <div id="traffic-user-access" class="tab-content">
+            <h3>User Access Patterns</h3>
+            
+            <p>Different user types access the infrastructure through various patterns, each with specific connectivity, authentication, and access control requirements.</p>
+            
+            <div class="diagram-container">
+                <div class="diagram" id="traffic-user-access-diagram">
+                    <!-- User Access Patterns diagram will be rendered by JavaScript -->
+                </div>
+            </div>
+            
+            <h4>Campus User Access</h4>
+            <div class="flow-diagram">
+                <div class="flow-step">
+                    <div class="flow-icon user"></div>
+                    <div class="flow-label">Campus User</div>
+                </div>
+                <div class="flow-arrow">→</div>
+                <div class="flow-step">
+                    <div class="flow-icon switch"></div>
+                    <div class="flow-label">Campus Access Switch</div>
+                </div>
+                <div class="flow-arrow">→</div>
+                <div class="flow-step">
+                    <div class="flow-icon router"></div>
+                    <div class="flow-label">Campus Router</div>
+                </div>
+                <div class="flow-arrow">→</div>
+                <div class="flow-step">
+                    <div class="flow-icon mpls"></div>
+                    <div class="flow-label">MPLS/Dark Fiber</div>
+                </div>
+                <div class="flow-arrow">→</div>
+                <div class="flow-step">
+                    <div class="flow-icon router"></div>
+                    <div class="flow-label">WAN Router (Nearest DC)</div>
+                </div>
+                <div class="flow-arrow">→</div>
+                <div class="flow-step">
+                    <div class="flow-icon firewall"></div>
+                    <div class="flow-label">Core Firewall</div>
+                </div>
+                <div class="flow-arrow">→</div>
+                <div class="flow-step">
+                    <div class="flow-icon loadbalancer"></div>
+                    <div class="flow-label">Internal Load Balancer</div>
+                </div>
+                <div class="flow-arrow">→</div>
+                <div class="flow-step">
+                    <div class="flow-icon server"></div>
+                    <div class="flow-label">Application Server</div>
+                </div>
+            </div>
+            
+            <h4>Branch User Access</h4>
+            <div class="flow-diagram">
+                <div class="flow-step">
+                    <div class="flow-icon user"></div>
+                    <div class="flow-label">Branch User</div>
+                </div>
+                <div class="flow-arrow">→</div>
+                <div class="flow-step">
+                    <div class="flow-icon switch"></div>
+                    <div class="flow-label">Branch Switch</div>
+                </div>
+                <div class="flow-arrow">→</div>
+                <div class="flow-step">
+                    <div class="flow-icon router"></div>
+                    <div class="flow-label">SD-WAN Router</div>
+                </div>
+                <div class="flow-arrow">→</div>
+                <div class="flow-step">
+                    <div class="flow-icon sdwan"></div>
+                    <div class="flow-label">SD-WAN Overlay</div>
+                </div>
+                <div class="flow-arrow">→</div>
+                <div class="flow-step">
+                    <div class="flow-icon router"></div>
+                    <div class="flow-label">WAN Router (Optimal DC)</div>
+                </div>
+                <div class="flow-arrow">→</div>
+                <div class="flow-step">
+                    <div class="flow-icon firewall"></div>
+                    <div class="flow-label">Core Firewall</div>
+                </div>
+                <div class="flow-arrow">→</div>
+                <div class="flow-step">
+                    <div class="flow-icon loadbalancer"></div>
+                    <div class="flow-label">Internal Load Balancer</div>
+                </div>
+                <div class="flow-arrow">→</div>
+                <div class="flow-step">
+                    <div class="flow-icon server"></div>
+                    <div class="flow-label">Application Server</div>
+                </div>
+            </div>
+            
+            <h4>Remote User Access</h4>
+            <div class="flow-diagram">
+                <div class="flow-step">
+                    <div class="flow-icon user"></div>
+                    <div class="flow-label">Remote User</div>
+                </div>
+                <div class="flow-arrow">→</div>
+                <div class="flow-step">
+                    <div class="flow-icon internet"></div>
+                    <div class="flow-label">Internet</div>
+                </div>
+                <div class="flow-arrow">→</div>
+                <div class="flow-step">
+                    <div class="flow-icon router"></div>
+                    <div class="flow-label">Border Router (North/South DC)</div>
+                </div>
+                <div class="flow-arrow">→</div>
+                <div class="flow-step">
+                    <div class="flow-icon vpn"></div>
+                    <div class="flow-label">VPN Concentrator</div>
+                </div>
+                <div class="flow-arrow">→</div>
+                <div class="flow-step">
+                    <div class="flow-icon firewall"></div>
+                    <div class="flow-label">Core Firewall</div>
+                </div>
+                <div class="flow-arrow">→</div>
+                <div class="flow-step">
+                    <div class="flow-icon loadbalancer"></div>
+                    <div class="flow-label">Internal Load Balancer</div>
+                </div>
+                <div class="flow-arrow">→</div>
+                <div class="flow-step">
+                    <div class="flow-icon server"></div>
+                    <div class="flow-label">Application Server</div>
+                </div>
+            </div>
+            
+            <h4>Authentication Flow</h4>
+            <table>
+                <tr>
+                    <th>User Type</th>
+                    <th>Authentication Method</th>
+                    <th>Authentication Flow</th>
+                    <th>Authorization Source</th>
+                </tr>
+                <tr>
+                    <td>Campus User</td>
+                    <td>802.1X + AD</td>
+                    <td>Client → Switch → RADIUS → AD</td>
+                    <td>Active Directory Groups</td>
+                </tr>
+                <tr>
+                    <td>Branch User</td>
+                    <td>802.1X + AD</td>
+                    <td>Client → Switch → RADIUS → AD</td>
+                    <td>Active Directory Groups</td>
+                </tr>
+                <tr>
+                    <td>Remote User</td>
+                    <td>Certificate + MFA</td>
+                    <td>Client → VPN → RADIUS → MFA → AD</td>
+                    <td>Active Directory Groups</td>
+                </tr>
+                <tr>
+                    <td>Administrator</td>
+                    <td>MFA + PAM</td>
+                    <td>Admin → Jump Server → PAM → MFA → Target</td>
+                    <td>Privileged Access Management</td>
+                </tr>
+            </table>
+        </div>
+    </div>
+</section>
